@@ -11,7 +11,7 @@ type VerifySmsReq struct {
 	Code        string `json:"code"`
 }
 type VerifySmsRes struct {
-	Register bool
-	Token    string
-	User     *models.User
+	Register bool         `json:"register"`
+	Token    string       `json:"token"`
+	User     *models.User `json:"user"`
 }

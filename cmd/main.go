@@ -63,7 +63,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers) {
 	dev := v1.Group("/dev")
 	{
 		dev.GET("/domain", func(c *gin.Context) {
-			config.Domain = c.Param("domain")
+			config.Domain = c.Query("domain")
 		})
 	}
 

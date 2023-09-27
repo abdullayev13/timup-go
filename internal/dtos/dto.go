@@ -1,7 +1,7 @@
 package dtos
 
 type Sign struct {
-	UserName string
-	Password string
-	Name     string
+	UserName string `json:"user_name"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
 }

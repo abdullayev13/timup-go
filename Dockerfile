@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN go mod tidy
-
-EXPOSE 8080
+EXPOSE 443
 
 CMD go run cmd/main.go

@@ -17,6 +17,6 @@ type RegisterReq struct {
 	Address     string `form:"address" json:"address"`
 }
 type RegisterRes struct {
-	User  *models.User
-	Token string
+	User  *models.User `json:"user"`
+	Token string       `json:"token"`
 }
