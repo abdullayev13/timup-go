@@ -68,28 +68,3 @@ func initApi(r *gin.Engine, handlers *handler.Handlers) {
 	}
 
 }
-
-/*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- */

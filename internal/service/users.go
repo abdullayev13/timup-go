@@ -75,8 +75,16 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 	}
 
 	res := new(dtos.RegisterRes)
-	res.User = user
-
+	res.User = new(dtos.User)
+	{
+		res.User.ID = user.ID
+		res.User.FistName = user.FistName
+		res.User.LastName = user.LastName
+		res.User.UserName = user.UserName
+		res.User.Address = user.Address
+		res.User.PhoneNumber = user.PhoneNumber
+		res.User.PhotoUrl = user.PhotoUrl
+	}
 	//TODO make token
 	res.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 

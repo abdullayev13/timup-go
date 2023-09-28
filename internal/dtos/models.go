@@ -11,7 +11,7 @@ type SmsCode struct {
 }
 
 type User struct {
-	ID          int
+	ID          int    `json:"id"`
 	FistName    string `json:"fist_name"`
 	LastName    string `json:"last_name"`
 	UserName    string `json:"user_name"`
