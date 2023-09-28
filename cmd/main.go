@@ -9,6 +9,7 @@ import (
 	"abdullayev13/timeup/internal/service"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"log"
 	"time"
 )
@@ -39,7 +40,7 @@ func main() {
 
 	initApi(r, handlers)
 
-	log.Fatalln(r.Run(":8080"))
+	log.Fatalln(r.Run(":" + config.Port))
 }
 
 func initApi(r *gin.Engine, handlers *handler.Handlers) {
@@ -67,4 +68,9 @@ func initApi(r *gin.Engine, handlers *handler.Handlers) {
 		})
 	}
 
+}
+
+func init() {
+	godotenv.Load("default.env")
+	config.LoadVarsFromEnv()
 }

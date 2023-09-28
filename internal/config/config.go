@@ -1,3 +1,13 @@
 package config
 
-var Domain = ""
+import "os"
+
+var (
+	Domain = ""
+	Port   = ""
+)
+
+func LoadVarsFromEnv() {
+	Domain = os.Getenv("DOMAIN")
+	Port = os.Getenv("PORT")
+}
