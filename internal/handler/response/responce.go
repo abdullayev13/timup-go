@@ -10,8 +10,9 @@ func Success(c *gin.Context, res interface{}) {
 		"status": true,
 	})
 }
+
 func Fail(c *gin.Context, msg string) {
-	c.JSON(200, map[string]interface{}{
+	c.JSON(400, map[string]interface{}{
 		"status": false,
 		"msg":    msg,
 	})
@@ -20,6 +21,7 @@ func Fail(c *gin.Context, msg string) {
 func FailErr(c *gin.Context, err error) {
 	Fail(c, err.Error())
 }
+
 func FailErrOrMsg(c *gin.Context, err error, msg string) {
 	if err != nil {
 		Fail(c, err.Error())
