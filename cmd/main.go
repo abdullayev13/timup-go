@@ -3,10 +3,12 @@ package main
 import (
 	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/handler"
+	"abdullayev13/timeup/internal/handler/middleware"
 	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/pkg/postgresdb"
 	"abdullayev13/timeup/internal/repo"
 	"abdullayev13/timeup/internal/service"
+	"abdullayev13/timeup/internal/utill"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -18,9 +20,12 @@ func main() {
 	db := postgresdb.New()
 	models.AutoMigrate(db)
 
+	jwtToken := utill.NewToken(config.JwtSignKey, config.JwtExpiringDuration)
+
 	repos := repo.New(db)
 	services := service.New(repos)
-	handlers := handler.New(services)
+	handlers := handler.New(services, jwtToken)
+	mw := middleware.New(jwtToken, services)
 
 	r := gin.Default()
 
@@ -38,12 +43,12 @@ func main() {
 
 	r.Static("api/v1/media", "./media")
 
-	initApi(r, handlers)
+	initApi(r, handlers, mw)
 
 	log.Fatalln(r.Run(":" + config.Port))
 }
 
-func initApi(r *gin.Engine, handlers *handler.Handlers) {
+func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 	v1 := r.Group("/api/v1")
 
 	sms := v1.Group("/sms")
