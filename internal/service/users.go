@@ -102,26 +102,3 @@ func (s *Users) Update(dto *dtos.User) (*dtos.User, error) {
 func (s *Users) DeleteById(id int) error {
 	return s.Repo.Users.DeleteById(id)
 }
-
-/*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- */

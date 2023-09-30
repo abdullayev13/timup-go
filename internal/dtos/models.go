@@ -69,3 +69,31 @@ func (d *User) MapToUser() *models.User {
 
 	return m
 }
+
+func (d *BusinessProfile) MapFromModel(m *models.BusinessProfile) *BusinessProfile {
+	d.ID = m.ID
+	d.UserID = m.UserID
+	d.WorkCategoryId = m.WorkCategoryId
+	d.OfficeAddress = m.OfficeAddress
+	d.OfficeName = m.OfficeName
+	d.Experience = m.Experience
+	d.Bio = m.Bio
+	d.DayOffs = m.DayOffs
+
+	return d
+}
+
+func (d *BusinessProfile) MapToModel() *models.BusinessProfile {
+	m := new(models.BusinessProfile)
+
+	m.ID = d.ID
+	m.UserID = d.UserID
+	m.WorkCategoryId = d.WorkCategoryId
+	m.OfficeAddress = d.OfficeAddress
+	m.OfficeName = d.OfficeName
+	m.Experience = d.Experience
+	m.Bio = d.Bio
+	m.DayOffs = d.DayOffs
+
+	return m
+}
