@@ -13,7 +13,8 @@ type Handlers struct {
 
 func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
 	return &Handlers{
-		SmsCode: &SmsCode{serv},
-		Auth:    &Auth{serv, jwtToken},
+		&SmsCode{serv},
+		&Auth{serv, jwtToken},
+		&User{serv, jwtToken},
 	}
 }

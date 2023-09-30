@@ -12,7 +12,7 @@ type Service struct {
 
 func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
 	return &Service{
-		Users:   &Users{repository, jwtToken},
-		SmsCode: &SmsCode{repository, jwtToken},
+		&Users{repository, jwtToken},
+		&SmsCode{repository, jwtToken},
 	}
 }

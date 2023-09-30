@@ -10,5 +10,8 @@ type Repo struct {
 }
 
 func New(DB *gorm.DB) *Repo {
-	return &Repo{Users: &Users{DB: DB}, SmsCode: &SmsCode{DB}}
+	return &Repo{
+		&Users{DB: DB},
+		&SmsCode{DB},
+	}
 }
