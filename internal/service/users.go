@@ -71,6 +71,10 @@ func (s *Users) GetById(userId int) (*dtos.User, error) {
 		return nil, err
 	}
 
+	if userModel.PhotoUrl != "" {
+		userModel.PhotoUrl = config.Domain + userModel.PhotoUrl
+	}
+
 	userDto := new(dtos.User)
 	userDto.MapFromUser(userModel)
 
