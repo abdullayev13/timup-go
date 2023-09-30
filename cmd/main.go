@@ -23,7 +23,7 @@ func main() {
 	jwtToken := utill.NewToken(config.JwtSignKey, config.JwtExpiringDuration)
 
 	repos := repo.New(db)
-	services := service.New(repos)
+	services := service.New(repos, jwtToken)
 	handlers := handler.New(services, jwtToken)
 	mw := middleware.New(jwtToken, services)
 
@@ -64,6 +64,14 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 	{
 		h := handlers.Auth
 		auth.POST("/register", h.Register)
+	}
+
+	user := v1.Group("/user")
+	{
+		h := handlers.User
+		user.GET("/me", mw.UserIDFromToken, h.UserMe)
+		user.PUT("/edit-me", mw.UserIDFromToken, h.EditMe)
+		user.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
 	}
 
 	dev := v1.Group("/dev")

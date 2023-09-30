@@ -12,6 +12,10 @@ var (
 	JwtExpiringDuration = time.Hour * 24 * 100_000
 )
 
+const (
+	UserIdKeyFromAuthMw = "UserIdKeyFromAuthMw"
+)
+
 func LoadVarsFromEnv() {
 	Domain = os.Getenv("DOMAIN")
 	Port = os.Getenv("PORT")

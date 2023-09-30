@@ -10,30 +10,8 @@ import (
 )
 
 type Users struct {
-	Repo *repo.Repo
-}
-
-func (s *Users) SignUp(sign dtos.Sign) (*models.User, error) {
-	exists := s.Repo.Users.ExistsByUsername(sign.UserName)
-	if exists {
-		return nil, errors.New("username exists")
-	}
-	user := models.User{UserName: sign.UserName, Password: sign.Password, FistName: sign.Name}
-	//s.DB.Create(&user)
-	return &user, nil
-}
-
-func (s *Users) LogIn(sign dtos.Sign) (string, error) {
-	exists := s.Repo.Users.ExistsByUsername(sign.UserName)
-	if !exists {
-		return "", errors.New("username or password wrong")
-	}
-	//var userId int
-	//s.DB.Model(&moduls.User{}).
-	//	Select("id").
-	//	Where("user_name = ?", sign.UserName).
-	//	Find(&userId)
-	return "token", nil
+	Repo     *repo.Repo
+	JwtToken *utill.TokenJWT
 }
 
 func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
@@ -76,17 +54,64 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 
 	res := new(dtos.RegisterRes)
 	res.User = new(dtos.User)
-	{
-		res.User.ID = user.ID
-		res.User.FistName = user.FistName
-		res.User.LastName = user.LastName
-		res.User.UserName = user.UserName
-		res.User.Address = user.Address
-		res.User.PhoneNumber = user.PhoneNumber
-		res.User.PhotoUrl = user.PhotoUrl
+	res.User.MapFromUser(user)
+
+	res.Token, err = s.JwtToken.Generate(user.ID)
+
+	if err != nil {
+		return nil, err
 	}
-	//TODO make token
-	res.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 
 	return res, nil
 }
+
+func (s *Users) GetById(userId int) (*dtos.User, error) {
+	userModel, err := s.Repo.Users.GetById(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	userDto := new(dtos.User)
+	userDto.MapFromUser(userModel)
+
+	return userDto, nil
+}
+
+func (s *Users) Update(dto *dtos.User) (*dtos.User, error) {
+	model := dto.MapToUser()
+	model, err := s.Repo.Users.Update(model)
+	if err != nil {
+		return nil, err
+	}
+
+	dto.MapFromUser(model)
+
+	return dto, nil
+}
+
+func (s *Users) DeleteById(id int) error {
+	return s.Repo.Users.DeleteById(id)
+}
+
+/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ */

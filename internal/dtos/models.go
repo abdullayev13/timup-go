@@ -1,6 +1,9 @@
 package dtos
 
-import "time"
+import (
+	"abdullayev13/timeup/internal/models"
+	"time"
+)
 
 type SmsCode struct {
 	ID          int
@@ -39,4 +42,30 @@ type Booking struct {
 	ServiceId int       `json:"service_id"`
 	ClientId  int       `json:"client_id"`
 	Date      time.Time `json:"date"`
+}
+
+func (d *User) MapFromUser(m *models.User) *User {
+	d.ID = m.ID
+	d.FistName = m.FistName
+	d.LastName = m.LastName
+	d.UserName = m.UserName
+	d.Address = m.Address
+	d.PhoneNumber = m.PhoneNumber
+	d.PhotoUrl = m.PhotoUrl
+
+	return d
+}
+
+func (d *User) MapToUser() *models.User {
+	m := new(models.User)
+
+	m.ID = d.ID
+	m.FistName = d.FistName
+	m.LastName = d.LastName
+	m.UserName = d.UserName
+	m.Address = d.Address
+	m.PhoneNumber = d.PhoneNumber
+	m.PhotoUrl = d.PhotoUrl
+
+	return m
 }

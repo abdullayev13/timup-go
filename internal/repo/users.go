@@ -119,6 +119,27 @@ func (r *Users) GetByPhoneNumber(phoneNumber string) (*models.User, error) {
 	return model, nil
 }
 
+func (r *Users) GetById(id int) (*models.User, error) {
+	model := new(models.User)
+	err := r.DB.First(model, id).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return model, nil
+}
+
+func (r *Users) Update(model *models.User) (*models.User, error) {
+	err := r.DB.Save(model).Error
+
+	return model, err
+}
+
+func (r *Users) DeleteById(id int) error {
+	return r.DB.Delete(models.User{ID: id}, id).Error
+}
+
+// special funcs
 func (r *Users) ExistsByUsername(username string) bool {
 	exists := r.exists(&models.User{}, "username=?", username)
 	//r.DB.Model(&models.User{}).

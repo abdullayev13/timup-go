@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/service"
 	"abdullayev13/timeup/internal/utill"
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,7 @@ func (mw *MW) UserIDFromToken(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	c.Set("userID", userID)
+	c.Set(config.UserIdKeyFromAuthMw, userID)
 }
 
 func (mw *MW) SetIntFromQuery(names ...string) gin.HandlerFunc {
