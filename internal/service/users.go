@@ -79,7 +79,17 @@ func (s *Users) GetById(userId int) (*dtos.User, error) {
 
 func (s *Users) Update(dto *dtos.User) (*dtos.User, error) {
 	model := dto.MapToUser()
-	model, err := s.Repo.Users.Update(model)
+	orgModel, err := s.Repo.Users.GetById(model.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	model.PhoneNumber = orgModel.PhoneNumber
+	if model.PhotoUrl == "" {
+		model.PhotoUrl = orgModel.PhotoUrl
+	}
+
+	model, err = s.Repo.Users.Update(model)
 	if err != nil {
 		return nil, err
 	}
