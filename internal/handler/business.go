@@ -42,3 +42,15 @@ func (h *Business) GetMe(c *gin.Context) {
 
 	response.Success(c, res)
 }
+
+func (h *Business) DeleteMe(c *gin.Context) {
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+
+	err := h.Service.Business.DeleteByUserId(userId)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, "ok")
+}

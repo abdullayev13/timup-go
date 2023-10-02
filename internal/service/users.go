@@ -104,5 +104,10 @@ func (s *Users) Update(dto *dtos.User) (*dtos.User, error) {
 }
 
 func (s *Users) DeleteById(id int) error {
+	err := s.Repo.Business.DeleteByUserId(id)
+	if err != nil {
+		return err
+	}
+
 	return s.Repo.Users.DeleteById(id)
 }

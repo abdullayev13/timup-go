@@ -57,3 +57,7 @@ func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, err
 
 	return nil, nil
 }
+
+func (s *Business) DeleteByUserId(userId int) error {
+	return s.Repo.Business.DeleteByUserId(userId)
+}

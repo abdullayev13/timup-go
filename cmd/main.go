@@ -79,6 +79,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		h := handlers.Business
 		business.POST("/create", mw.UserIDFromToken, h.Create)
 		business.GET("/get-me", mw.UserIDFromToken, h.GetMe)
+		business.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
 	}
 
 	dev := v1.Group("/dev")

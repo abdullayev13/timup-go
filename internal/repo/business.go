@@ -41,3 +41,17 @@ func (r *Business) Update(model *models.BusinessProfile) (*models.BusinessProfil
 
 	return model, err
 }
+
+func (r *Business) DeleteById(id int) error {
+	model := new(models.BusinessProfile)
+	err := r.DB.Where("id = ?", id).Delete(model).Error
+
+	return err
+}
+
+func (r *Business) DeleteByUserId(userId int) error {
+	model := new(models.BusinessProfile)
+	err := r.DB.Where("user_id = ?", userId).Delete(model).Error
+
+	return err
+}
