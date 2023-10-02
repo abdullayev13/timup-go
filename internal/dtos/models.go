@@ -22,11 +22,13 @@ type User struct {
 	Address     string `json:"address"`
 	PhotoUrl    string `json:"photo_url"`
 }
+
 type WorkCategory struct {
 	ID       int    `json:"id"`
 	ParentId int    `json:"parent_id"`
 	Name     string `json:"name"`
 }
+
 type BusinessProfile struct {
 	ID             int    `json:"id"`
 	UserID         int    `json:"user_id"`
@@ -37,6 +39,7 @@ type BusinessProfile struct {
 	Bio            string `json:"bio"`
 	DayOffs        string `json:"day_offs"`
 }
+
 type Booking struct {
 	ID        int       `json:"id"`
 	ServiceId int       `json:"service_id"`
@@ -94,6 +97,24 @@ func (d *BusinessProfile) MapToModel() *models.BusinessProfile {
 	m.Experience = d.Experience
 	m.Bio = d.Bio
 	m.DayOffs = d.DayOffs
+
+	return m
+}
+
+func (d *WorkCategory) MapFromModel(m *models.WorkCategory) *WorkCategory {
+	d.ID = m.ID
+	d.Name = m.Name
+	d.ParentId = m.ParentId
+
+	return d
+}
+
+func (d *WorkCategory) MapToModel() *models.WorkCategory {
+	m := new(models.WorkCategory)
+
+	m.ID = d.ID
+	m.Name = d.Name
+	m.ParentId = d.ParentId
 
 	return m
 }

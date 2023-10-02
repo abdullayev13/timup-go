@@ -10,6 +10,7 @@ type Handlers struct {
 	Auth     *Auth
 	User     *User
 	Business *Business
+	Category *Category
 }
 
 func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
@@ -18,5 +19,6 @@ func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
 		&Auth{serv, jwtToken},
 		&User{serv, jwtToken},
 		&Business{serv},
+		&Category{serv},
 	}
 }

@@ -8,6 +8,7 @@ type Repo struct {
 	Users    *Users
 	SmsCode  *SmsCode
 	Business *Business
+	Category *Category
 }
 
 func New(DB *gorm.DB) *Repo {
@@ -15,5 +16,6 @@ func New(DB *gorm.DB) *Repo {
 		&Users{DB: DB},
 		&SmsCode{DB},
 		&Business{DB},
+		&Category{DB},
 	}
 }
