@@ -11,6 +11,7 @@ type Handlers struct {
 	User     *User
 	Business *Business
 	Category *Category
+	Region   *Region
 }
 
 func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
@@ -20,5 +21,6 @@ func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
 		&User{serv, jwtToken},
 		&Business{serv},
 		&Category{serv},
+		&Region{},
 	}
 }
