@@ -35,27 +35,20 @@ func (s *Business) GetByUserId(userId int) (*dtos.BusinessProfile, error) {
 }
 
 func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, error) {
-	//model := dto.MapToUser()
-	//orgModel, err := s.Repo.Users.GetById(model.ID)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//model.PhoneNumber = orgModel.PhoneNumber
-	//if model.PhotoUrl == "" {
-	//	model.PhotoUrl = orgModel.PhotoUrl
-	//}
-	//
-	//model, err = s.Repo.Users.Update(model)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//dto.MapFromUser(model)
-	//
-	//return dto, nil
+	model := dto.MapToModel()
+	_, err := s.Repo.Business.GetById(model.ID)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	model, err = s.Repo.Business.Update(model)
+	if err != nil {
+		return nil, err
+	}
+
+	dto.MapFromModel(model)
+
+	return dto, nil
 }
 
 func (s *Business) DeleteByUserId(userId int) error {

@@ -43,6 +43,25 @@ func (h *Business) GetMe(c *gin.Context) {
 	response.Success(c, res)
 }
 
+func (h *Business) UpdateMe(c *gin.Context) {
+	data := new(dtos.BusinessProfile)
+	err := c.Bind(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	data.UserID = c.GetInt(config.UserIdKeyFromAuthMw)
+
+	res, err := h.Service.Business.Update(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, res)
+}
+
 func (h *Business) DeleteMe(c *gin.Context) {
 	userId := c.GetInt(config.UserIdKeyFromAuthMw)
 
