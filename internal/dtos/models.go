@@ -25,7 +25,7 @@ type User struct {
 
 type WorkCategory struct {
 	ID       int    `json:"id"`
-	ParentId int    `json:"parent_id"`
+	ParentId int    `json:"parent_id,omitempty"`
 	Name     string `json:"name"`
 }
 
