@@ -17,6 +17,7 @@ import (
 )
 
 func main() {
+	println("Started...")
 	db := postgresdb.New()
 	models.AutoMigrate(db)
 
@@ -79,6 +80,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		h := handlers.Business
 		business.POST("/create", mw.UserIDFromToken, h.Create)
 		business.GET("/get-me", mw.UserIDFromToken, h.GetMe)
+		business.PUT("/update-me", mw.UserIDFromToken, h.UpdateMe)
 		business.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
 	}
 
@@ -89,6 +91,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		category.GET("/get", h.Get)
 		category.DELETE("/delete/:id", mw.UserIDFromToken, h.Delete)
 	}
+
 	region := v1.Group("/region")
 	{
 		h := handlers.Region

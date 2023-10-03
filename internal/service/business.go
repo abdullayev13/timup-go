@@ -3,6 +3,7 @@ package service
 import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/repo"
+	"errors"
 )
 
 type Business struct {
@@ -36,9 +37,13 @@ func (s *Business) GetByUserId(userId int) (*dtos.BusinessProfile, error) {
 
 func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, error) {
 	model := dto.MapToModel()
-	_, err := s.Repo.Business.GetById(model.ID)
+	orgModel, err := s.Repo.Business.GetById(model.ID)
 	if err != nil {
 		return nil, err
+	}
+
+	if orgModel.UserID != model.UserID {
+		return nil, errors.New("access denied")
 	}
 
 	model, err = s.Repo.Business.Update(model)
