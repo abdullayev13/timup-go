@@ -19,7 +19,7 @@ import (
 func main() {
 	println("Started...")
 	db := postgresdb.New()
-	models.AutoMigrate(db)
+	go models.AutoMigrate(db)
 
 	jwtToken := utill.NewToken(config.JwtSignKey, config.JwtExpiringDuration)
 
