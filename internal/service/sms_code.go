@@ -13,6 +13,7 @@ import (
 type SmsCode struct {
 	Repo     *repo.Repo
 	JwtToken *utill.TokenJWT
+	users    *Users
 }
 
 func (s *SmsCode) SendSms(data *dtos.SendSmsReq) error {
@@ -64,7 +65,10 @@ func (s *SmsCode) VerifySmsCode(data *dtos.VerifySmsReq) (*dtos.VerifySmsRes, er
 		return nil, err
 	}
 
-	res.User = user
+	res.User, err = s.users.GetUserBusiness(user.ID)
+	if err != nil {
+		return nil, err
+	}
 
 	res.Token, err = s.JwtToken.Generate(user.ID)
 	if err != nil {

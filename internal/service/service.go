@@ -13,9 +13,10 @@ type Service struct {
 }
 
 func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
+	users := &Users{repository, jwtToken}
 	return &Service{
-		&Users{repository, jwtToken},
-		&SmsCode{repository, jwtToken},
+		users,
+		&SmsCode{repository, jwtToken, users},
 		&Business{repository},
 		&Category{repository},
 	}

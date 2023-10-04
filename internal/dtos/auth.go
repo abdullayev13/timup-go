@@ -1,6 +1,7 @@
 package dtos
 
 import (
+	"abdullayev13/timeup/internal/models"
 	"mime/multipart"
 )
 
@@ -15,7 +16,45 @@ type RegisterReq struct {
 	PhoneNumber string `form:"phone_number" json:"phone_number"`
 	Address     string `form:"address" json:"address"`
 }
+
 type RegisterRes struct {
-	User  *User  `json:"user"`
-	Token string `json:"token"`
+	User  *UserBusiness `json:"user"`
+	Token string        `json:"token"`
+}
+
+type UserBusiness struct {
+	ID          int              `json:"id"`
+	FistName    string           `json:"fist_name"`
+	LastName    string           `json:"last_name"`
+	UserName    string           `json:"user_name"`
+	PhoneNumber string           `json:"phone_number"`
+	Address     string           `json:"address"`
+	PhotoUrl    string           `json:"photo_url"`
+	Business    *BusinessProfile `json:"business"`
+}
+
+func (d *UserBusiness) MapFromModel(m *models.User) *UserBusiness {
+	d.ID = m.ID
+	d.FistName = m.FistName
+	d.LastName = m.LastName
+	d.UserName = m.UserName
+	d.Address = m.Address
+	d.PhoneNumber = m.PhoneNumber
+	d.PhotoUrl = m.PhotoUrl
+
+	return d
+}
+
+func (d *UserBusiness) MapToModel() *models.User {
+	m := new(models.User)
+
+	m.ID = d.ID
+	m.FistName = d.FistName
+	m.LastName = d.LastName
+	m.UserName = d.UserName
+	m.Address = d.Address
+	m.PhoneNumber = d.PhoneNumber
+	m.PhotoUrl = d.PhotoUrl
+
+	return m
 }

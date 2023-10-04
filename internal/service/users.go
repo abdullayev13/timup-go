@@ -1,7 +1,6 @@
 package service
 
 import (
-	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/repo"
@@ -31,8 +30,6 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 		if err != nil {
 			return nil, err
 		}
-
-		photoUrl = config.Domain + photoUrl
 	}
 
 	user := new(models.User)
@@ -53,11 +50,12 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 	}
 
 	res := new(dtos.RegisterRes)
-	res.User = new(dtos.User)
-	res.User.MapFromUser(user)
+	res.User, err = s.GetUserBusiness(user.ID)
+	if err != nil {
+		return nil, err
+	}
 
 	res.Token, err = s.JwtToken.Generate(user.ID)
-
 	if err != nil {
 		return nil, err
 	}
@@ -71,14 +69,34 @@ func (s *Users) GetById(userId int) (*dtos.User, error) {
 		return nil, err
 	}
 
-	if userModel.PhotoUrl != "" {
-		userModel.PhotoUrl = config.Domain + userModel.PhotoUrl
-	}
+	userModel.PhotoUrl = utill.PutDomain(userModel.PhotoUrl)
 
 	userDto := new(dtos.User)
 	userDto.MapFromUser(userModel)
 
 	return userDto, nil
+}
+
+func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
+	userModel, err := s.Repo.Users.GetById(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	userModel.PhotoUrl = utill.PutDomain(userModel.PhotoUrl)
+
+	dto := new(dtos.UserBusiness)
+	dto.MapFromModel(userModel)
+
+	businessModel, err := s.Repo.Business.GetByUserId(userId)
+	if err != nil {
+		return dto, nil
+	}
+
+	dto.Business = new(dtos.BusinessProfile)
+	dto.Business.MapFromModel(businessModel)
+
+	return dto, nil
 }
 
 func (s *Users) Update(dto *dtos.User) (*dtos.User, error) {

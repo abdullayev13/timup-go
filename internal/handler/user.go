@@ -17,7 +17,7 @@ type User struct {
 func (h *User) UserMe(c *gin.Context) {
 	userId := c.GetInt(config.UserIdKeyFromAuthMw)
 
-	res, err := h.Service.Users.GetById(userId)
+	res, err := h.Service.Users.GetUserBusiness(userId)
 	if err != nil {
 		response.FailErr(c, err)
 		return
