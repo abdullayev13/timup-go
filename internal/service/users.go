@@ -93,8 +93,15 @@ func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
 		return dto, nil
 	}
 
+	var categoryName string
+	category, err := s.Repo.Category.GetById(businessModel.WorkCategoryId)
+	if err == nil {
+		categoryName = category.Name
+	}
+
 	dto.Business = new(dtos.BusinessProfile)
 	dto.Business.MapFromModel(businessModel)
+	dto.Business.SetCategoryName(categoryName)
 
 	return dto, nil
 }

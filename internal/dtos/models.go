@@ -30,14 +30,15 @@ type WorkCategory struct {
 }
 
 type BusinessProfile struct {
-	ID             int    `json:"id"`
-	UserID         int    `json:"user_id"`
-	WorkCategoryId int    `json:"work_category_id"`
-	OfficeAddress  string `json:"office_address"`
-	OfficeName     string `json:"office_name"`
-	Experience     int    `json:"experience"`
-	Bio            string `json:"bio"`
-	DayOffs        string `json:"day_offs"`
+	ID            int    `json:"id"`
+	UserID        int    `json:"user_id"`
+	CategoryId    int    `json:"category_id"`
+	CategoryName  string `json:"category_name"`
+	OfficeAddress string `json:"office_address"`
+	OfficeName    string `json:"office_name"`
+	Experience    int    `json:"experience"`
+	Bio           string `json:"bio"`
+	DayOffs       string `json:"day_offs"`
 }
 
 type Booking struct {
@@ -76,7 +77,7 @@ func (d *User) MapToUser() *models.User {
 func (d *BusinessProfile) MapFromModel(m *models.BusinessProfile) *BusinessProfile {
 	d.ID = m.ID
 	d.UserID = m.UserID
-	d.WorkCategoryId = m.WorkCategoryId
+	d.CategoryId = m.WorkCategoryId
 	d.OfficeAddress = m.OfficeAddress
 	d.OfficeName = m.OfficeName
 	d.Experience = m.Experience
@@ -86,12 +87,16 @@ func (d *BusinessProfile) MapFromModel(m *models.BusinessProfile) *BusinessProfi
 	return d
 }
 
+func (d *BusinessProfile) SetCategoryName(name string) {
+	d.CategoryName = name
+}
+
 func (d *BusinessProfile) MapToModel() *models.BusinessProfile {
 	m := new(models.BusinessProfile)
 
 	m.ID = d.ID
 	m.UserID = d.UserID
-	m.WorkCategoryId = d.WorkCategoryId
+	m.WorkCategoryId = d.CategoryId
 	m.OfficeAddress = d.OfficeAddress
 	m.OfficeName = d.OfficeName
 	m.Experience = d.Experience

@@ -11,14 +11,22 @@ type Business struct {
 }
 
 func (s *Business) Create(data *dtos.BusinessProfile) (*dtos.BusinessProfile, error) {
-	model := data.MapToModel()
+	category, err := s.Repo.Category.GetById(data.CategoryId)
+	if err != nil {
+		return nil, errors.New("category not found")
+	}
+	if category.ParentId == 0 {
+		return nil, errors.New("category not valid")
+	}
 
-	model, err := s.Repo.Business.Create(model)
+	model := data.MapToModel()
+	model, err = s.Repo.Business.Create(model)
 	if err != nil {
 		return nil, err
 	}
 
 	data.MapFromModel(model)
+	data.SetCategoryName(category.Name)
 
 	return data, nil
 }
@@ -29,13 +37,28 @@ func (s *Business) GetByUserId(userId int) (*dtos.BusinessProfile, error) {
 		return nil, err
 	}
 
+	var categoryName string
+	category, err := s.Repo.Category.GetById(model.WorkCategoryId)
+	if err == nil {
+		categoryName = category.Name
+	}
+
 	dto := new(dtos.BusinessProfile)
 	dto.MapFromModel(model)
+	dto.SetCategoryName(categoryName)
 
 	return dto, nil
 }
 
 func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, error) {
+	category, err := s.Repo.Category.GetById(dto.CategoryId)
+	if err != nil {
+		return nil, errors.New("category not found")
+	}
+	if category.ParentId == 0 {
+		return nil, errors.New("category not valid")
+	}
+
 	model := dto.MapToModel()
 	orgModel, err := s.Repo.Business.GetById(model.ID)
 	if err != nil {
@@ -52,6 +75,7 @@ func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, err
 	}
 
 	dto.MapFromModel(model)
+	dto.SetCategoryName(category.Name)
 
 	return dto, nil
 }
