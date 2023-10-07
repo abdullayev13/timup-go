@@ -21,6 +21,7 @@ type User struct {
 	PhoneNumber string `gorm:"index:idx_phone_number,unique;not null"`
 	Address     string
 	PhotoUrl    string
+	BirthDate   *time.Time
 }
 type WorkCategory struct {
 	ID       int

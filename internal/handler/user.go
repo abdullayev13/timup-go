@@ -46,6 +46,27 @@ func (h *User) EditMe(c *gin.Context) {
 	response.Success(c, res)
 }
 
+func (h *User) EditPhoto(c *gin.Context) {
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+
+	data := new(dtos.PhotoReq)
+	err := c.Bind(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+	data.UserId = userId
+
+	res, err := h.Service.Users.EditPhoto(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, res)
+
+}
+
 func (h *User) DeleteMe(c *gin.Context) {
 	userId := c.GetInt(config.UserIdKeyFromAuthMw)
 

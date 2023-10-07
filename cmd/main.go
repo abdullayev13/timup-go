@@ -65,6 +65,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 	{
 		h := handlers.Auth
 		auth.POST("/register", h.Register)
+		auth.POST("/log-out", mw.UserIDFromToken, h.LogOut)
 	}
 
 	user := v1.Group("/user")
@@ -72,6 +73,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		h := handlers.User
 		user.GET("/me", mw.UserIDFromToken, h.UserMe)
 		user.PUT("/edit-me", mw.UserIDFromToken, h.EditMe)
+		user.PUT("/edit-photo", mw.UserIDFromToken, h.EditPhoto)
 		user.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
 	}
 

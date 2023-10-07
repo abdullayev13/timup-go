@@ -42,6 +42,7 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 		user.UserName = data.UserName
 		user.PhoneNumber = data.PhoneNumber
 		user.Address = data.Address
+		user.BirthDate = data.BirthDate
 	}
 
 	user, err = s.Repo.Users.Create(user)
@@ -69,7 +70,7 @@ func (s *Users) GetById(userId int) (*dtos.User, error) {
 		return nil, err
 	}
 
-	userModel.PhotoUrl = utill.PutDomain(userModel.PhotoUrl)
+	userModel.PhotoUrl = utill.PutMediaDomain(userModel.PhotoUrl)
 
 	userDto := new(dtos.User)
 	userDto.MapFromUser(userModel)
@@ -83,7 +84,7 @@ func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
 		return nil, err
 	}
 
-	userModel.PhotoUrl = utill.PutDomain(userModel.PhotoUrl)
+	userModel.PhotoUrl = utill.PutMediaDomain(userModel.PhotoUrl)
 
 	dto := new(dtos.UserBusiness)
 	dto.MapFromModel(userModel)
@@ -135,4 +136,30 @@ func (s *Users) DeleteById(id int) error {
 	}
 
 	return s.Repo.Users.DeleteById(id)
+}
+
+func (s *Users) EditPhoto(data *dtos.PhotoReq) (*dtos.PhotoRes, error) {
+	user, err := s.Repo.Users.GetById(data.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	var photoUrl = data.PhotoUrl
+	if data.ProfilePhoto != nil {
+		photoUrl, err = utill.Upload(data.ProfilePhoto, "profilephoto")
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	user.PhotoUrl = photoUrl
+	user, err = s.Repo.Users.Update(user)
+	if err != nil {
+		return nil, err
+	}
+
+	res := new(dtos.PhotoRes)
+	res.PhotoUrl = utill.PutMediaDomain(photoUrl)
+
+	return res, nil
 }

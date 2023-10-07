@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/handler/response"
 	"abdullayev13/timeup/internal/service"
@@ -28,4 +29,9 @@ func (h *Auth) Register(c *gin.Context) {
 	}
 
 	response.Success(c, res)
+}
+
+func (h *Auth) LogOut(c *gin.Context) {
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+	println("log out : ", userId)
 }
