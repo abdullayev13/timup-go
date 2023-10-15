@@ -10,7 +10,7 @@ type BusinessMini struct {
 }
 
 type BusinessFilter struct {
-	Limit      int
-	Offset     int
-	CategoryId int
+	Limit      int `json:"limit" form:"limit"`
+	Offset     int `json:"offset" form:"offset"`
+	CategoryId int `json:"category_id" form:"category_id"`
 }
