@@ -17,7 +17,7 @@ func (r *SmsCode) Create(model *models.SmsCode) (*models.SmsCode, error) {
 
 func (r *SmsCode) LastByPhoneNumber(phoneNumber string) (*models.SmsCode, error) {
 	model := new(models.SmsCode)
-	err := r.DB.Order("sent_at DESC").
+	err := r.DB.Where("phone_number = ?", phoneNumber).Order("sent_at DESC").
 		First(model).Error
 
 	return model, err

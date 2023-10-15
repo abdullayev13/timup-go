@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"gorm.io/gorm"
 )
@@ -34,6 +35,21 @@ func (r *Business) GetById(id int) (*models.BusinessProfile, error) {
 	}
 
 	return model, nil
+}
+
+func (r *Business) GetByCategory(data *dtos.BusinessFilter) ([]*dtos.BusinessMini, error) {
+	listModel := make([]*dtos.BusinessMini, 0)
+
+	err := r.DB.Raw(`SELECT b.id as business_id, b.user_id, b.experience,
+u.fist_name, u.last_name, u.photo_url FROM users u 
+JOIN business_profiles b on b.user_id=u.id 
+WHERE b.work_category_id = ? LIMIT ? OFFSET ?`, data.CategoryId, data.Limit, data.Offset).Find(&listModel).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return listModel, nil
 }
 
 func (r *Business) Update(model *models.BusinessProfile) (*models.BusinessProfile, error) {

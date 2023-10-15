@@ -49,6 +49,16 @@ func (s *Business) GetByUserId(userId int) (*dtos.BusinessProfile, error) {
 
 	return dto, nil
 }
+func (s *Business) GetByGetByCategory(data *dtos.BusinessFilter) ([]*dtos.BusinessMini, error) {
+	if data.Limit == 0 {
+		data.Limit = 100
+	}
+	if data.CategoryId == 0 {
+		return nil, errors.New("category not given")
+	}
+
+	return s.Repo.Business.GetByCategory(data)
+}
 
 func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, error) {
 	category, err := s.Repo.Category.GetById(dto.CategoryId)

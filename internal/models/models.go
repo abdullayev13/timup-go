@@ -23,11 +23,13 @@ type User struct {
 	PhotoUrl    string
 	BirthDate   *time.Time
 }
+
 type WorkCategory struct {
 	ID       int
 	ParentId int    `gorm:"index:idx_parent_id__name,unique;"`
 	Name     string `gorm:"index:idx_parent_id__name,unique;not null"`
 }
+
 type BusinessProfile struct {
 	ID             int
 	UserID         int
@@ -38,9 +40,10 @@ type BusinessProfile struct {
 	Bio            string
 	DayOffs        string
 }
+
 type Booking struct {
-	ID        int
-	ServiceId int
-	ClientId  int
-	Date      time.Time
+	ID         int
+	BusinessId int
+	ClientId   int
+	Date       time.Time
 }

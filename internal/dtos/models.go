@@ -2,6 +2,7 @@ package dtos
 
 import (
 	"abdullayev13/timeup/internal/models"
+	"abdullayev13/timeup/internal/utill"
 	"time"
 )
 
@@ -42,10 +43,11 @@ type BusinessProfile struct {
 }
 
 type Booking struct {
-	ID        int       `json:"id"`
-	ServiceId int       `json:"service_id"`
-	ClientId  int       `json:"client_id"`
-	Date      time.Time `json:"date"`
+	ID         int    `json:"id"`
+	BusinessId int    `json:"business_id"`
+	ClientId   int    `json:"client_id"`
+	Date       string `json:"date"`
+	Time       string `json:"time"`
 }
 
 func (d *User) MapFromUser(m *models.User) *User {
@@ -120,6 +122,26 @@ func (d *WorkCategory) MapToModel() *models.WorkCategory {
 	m.ID = d.ID
 	m.Name = d.Name
 	m.ParentId = d.ParentId
+
+	return m
+}
+
+func (d *Booking) MapFromModel(m *models.Booking) *Booking {
+	d.ID = m.ID
+	d.BusinessId = m.BusinessId
+	d.ClientId = m.ClientId
+	d.Date, d.Time = utill.Format(m.Date)
+
+	return d
+}
+
+func (d *Booking) MapToModel() *models.Booking {
+	m := new(models.Booking)
+
+	m.ID = d.ID
+	m.BusinessId = d.BusinessId
+	m.ClientId = d.ClientId
+	m.Date, _ = utill.Parse(d.Date, d.Time)
 
 	return m
 }

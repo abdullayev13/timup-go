@@ -10,6 +10,7 @@ type Service struct {
 	SmsCode  *SmsCode
 	Business *Business
 	Category *Category
+	Booking  *Booking
 }
 
 func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
@@ -19,5 +20,6 @@ func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
 		&SmsCode{repository, jwtToken, users},
 		&Business{repository},
 		&Category{repository},
+		&Booking{repository},
 	}
 }

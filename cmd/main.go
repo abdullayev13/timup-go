@@ -82,6 +82,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		h := handlers.Business
 		business.POST("/create", mw.UserIDFromToken, h.Create)
 		business.GET("/get-me", mw.UserIDFromToken, h.GetMe)
+		business.GET("/get-by-category/:id", h.GetByCategory)
 		business.PUT("/update-me", mw.UserIDFromToken, h.UpdateMe)
 		business.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
 	}
@@ -92,6 +93,18 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		category.POST("/create", mw.UserIDFromToken, h.Create)
 		category.GET("/get", h.Get)
 		category.DELETE("/delete/:id", mw.UserIDFromToken, h.Delete)
+	}
+
+	booking := v1.Group("/booking")
+	{
+		h := handlers.Booking
+		booking.POST("/client/create", mw.UserIDFromToken, h.Create)
+
+		booking.GET("/client/get-list", mw.UserIDFromToken, h.GetListByClient)
+		booking.GET("/business/get-list/:business_id", h.GetListByBusiness)
+
+		booking.DELETE("/client/delete/:id", mw.UserIDFromToken, h.DeleteByClient)
+		booking.DELETE("/business/delete/:id", mw.UserIDFromToken, h.DeleteByBusiness)
 	}
 
 	region := v1.Group("/region")
@@ -105,6 +118,8 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		dev.GET("/domain", func(c *gin.Context) {
 			config.Domain = c.Query("domain")
 		})
+		dev.GET("/booking/get-list", handlers.Booking.GetList)
+		booking.GET("/dev/delete/:id", handlers.Booking.DeleteById)
 	}
 
 }
