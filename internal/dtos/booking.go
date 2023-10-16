@@ -42,7 +42,7 @@ func (d *BookingMini) SetUser(user *models.User) *BookingMini {
 	d.LastName = user.LastName
 	d.UserName = user.UserName
 	d.PhoneNumber = user.PhoneNumber
-	d.PhotoUrl = user.PhotoUrl
+	d.PhotoUrl = utill.PutMediaDomain(user.PhotoUrl)
 
 	return d
 }

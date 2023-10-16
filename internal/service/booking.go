@@ -79,13 +79,13 @@ func (s *Booking) GetListByClient(data *dtos.BookingFilter, userId int) ([]*dtos
 
 	listDto := make([]*dtos.BookingMini, len(list))
 	for i, booking := range list {
-		client, err := s.Repo.Users.GetById(booking.ClientId)
+		business, err := s.Repo.Users.GetByBusinessId(booking.BusinessId)
 		if err != nil {
 			return nil, err
 		}
 		listDto[i] = new(dtos.BookingMini).
 			MapFromModel(booking).
-			SetUser(client)
+			SetUser(business)
 	}
 
 	return listDto, nil
@@ -101,7 +101,7 @@ func (s *Booking) GetListByBusiness(data *dtos.BookingFilter) ([]*dtos.BookingMi
 
 	listDto := make([]*dtos.BookingMini, len(list))
 	for i, booking := range list {
-		client, err := s.Repo.Users.GetByBusinessId(booking.BusinessId)
+		client, err := s.Repo.Users.GetById(booking.ClientId)
 		if err != nil {
 			return nil, err
 		}

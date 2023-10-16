@@ -57,7 +57,7 @@ func (d *User) MapFromUser(m *models.User) *User {
 	d.UserName = m.UserName
 	d.Address = m.Address
 	d.PhoneNumber = m.PhoneNumber
-	d.PhotoUrl = m.PhotoUrl
+	d.PhotoUrl = utill.PutMediaDomain(m.PhotoUrl)
 
 	return d
 }

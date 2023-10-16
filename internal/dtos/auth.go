@@ -2,6 +2,7 @@ package dtos
 
 import (
 	"abdullayev13/timeup/internal/models"
+	"abdullayev13/timeup/internal/utill"
 	"mime/multipart"
 	"time"
 )
@@ -42,7 +43,7 @@ func (d *UserBusiness) MapFromModel(m *models.User) *UserBusiness {
 	d.UserName = m.UserName
 	d.Address = m.Address
 	d.PhoneNumber = m.PhoneNumber
-	d.PhotoUrl = m.PhotoUrl
+	d.PhotoUrl = utill.PutMediaDomain(m.PhotoUrl)
 
 	return d
 }
@@ -56,7 +57,7 @@ func (d *UserBusiness) MapToModel() *models.User {
 	m.UserName = d.UserName
 	m.Address = d.Address
 	m.PhoneNumber = d.PhoneNumber
-	m.PhotoUrl = d.PhotoUrl
+	m.PhotoUrl = utill.PutMediaDomain(d.PhotoUrl)
 
 	return m
 }

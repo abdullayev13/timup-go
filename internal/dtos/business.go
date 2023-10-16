@@ -1,6 +1,9 @@
 package dtos
 
-import "abdullayev13/timeup/internal/models"
+import (
+	"abdullayev13/timeup/internal/models"
+	"abdullayev13/timeup/internal/utill"
+)
 
 type BusinessMini struct {
 	BusinessID int    `json:"business_id"`
@@ -58,5 +61,5 @@ func (d *BusinessData) SetUser(user *models.User) {
 	d.UserName = user.UserName
 	d.PhoneNumber = user.PhoneNumber
 	d.Address = user.Address
-	d.PhotoUrl = user.PhotoUrl
+	d.PhotoUrl = utill.PutMediaDomain(user.PhotoUrl)
 }
