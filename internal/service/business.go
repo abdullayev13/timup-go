@@ -49,6 +49,7 @@ func (s *Business) GetByUserId(userId int) (*dtos.BusinessProfile, error) {
 
 	return dto, nil
 }
+
 func (s *Business) GetByGetByCategory(data *dtos.BusinessFilter) ([]*dtos.BusinessMini, error) {
 	if data.Limit == 0 {
 		data.Limit = 100
@@ -92,4 +93,31 @@ func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, err
 
 func (s *Business) DeleteByUserId(userId int) error {
 	return s.Repo.Business.DeleteByUserId(userId)
+}
+
+//	other
+
+func (s *Business) GetProfileById(id int) (*dtos.BusinessData, error) {
+	model, err := s.Repo.Business.GetById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var categoryName string
+	category, err := s.Repo.Category.GetById(model.WorkCategoryId)
+	if err == nil {
+		categoryName = category.Name
+	}
+
+	user, err := s.Repo.Users.GetById(model.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	dto := new(dtos.BusinessData)
+	dto.MapFromModel(model)
+	dto.SetCategoryName(categoryName)
+	dto.SetUser(user)
+
+	return dto, nil
 }

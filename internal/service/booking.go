@@ -2,6 +2,7 @@ package service
 
 import (
 	"abdullayev13/timeup/internal/dtos"
+	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/repo"
 	"errors"
 	"gorm.io/gorm"
@@ -35,15 +36,7 @@ func (s *Booking) Create(data *dtos.Booking) (*dtos.Booking, error) {
 }
 
 func (s *Booking) GetList(data *dtos.BookingFilter) ([]*dtos.Booking, error) {
-	return s.getList(data)
-}
-
-func (s *Booking) getList(data *dtos.BookingFilter) ([]*dtos.Booking, error) {
-	if data.Limit == 0 {
-		data.Limit = 100
-	}
-
-	list, err := s.Repo.Booking.GetList(data)
+	list, err := s.getList(data)
 	if err != nil {
 		return nil, err
 	}
@@ -53,21 +46,71 @@ func (s *Booking) getList(data *dtos.BookingFilter) ([]*dtos.Booking, error) {
 		listDto[i] = new(dtos.Booking).
 			MapFromModel(model)
 	}
+	return listDto, nil
+}
+
+func (s *Booking) getList(data *dtos.BookingFilter) ([]*models.Booking, error) {
+	if data.Limit == 0 {
+		data.Limit = 100
+	}
+
+	return s.Repo.Booking.GetList(data)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//listDto := make([]*dtos.Booking, len(list))
+	//for i, model := range list {
+	//	listDto[i] = new(dtos.Booking).
+	//		MapFromModel(model)
+	//}
+	//
+	//return listDto, nil
+}
+
+func (s *Booking) GetListByClient(data *dtos.BookingFilter, userId int) ([]*dtos.BookingMini, error) {
+	data.BusinessId = 0
+	data.ClientId = userId
+
+	list, err := s.getList(data)
+	if err != nil {
+		return nil, err
+	}
+
+	listDto := make([]*dtos.BookingMini, len(list))
+	for i, booking := range list {
+		client, err := s.Repo.Users.GetById(booking.ClientId)
+		if err != nil {
+			return nil, err
+		}
+		listDto[i] = new(dtos.BookingMini).
+			MapFromModel(booking).
+			SetUser(client)
+	}
 
 	return listDto, nil
 }
 
-func (s *Booking) GetListByClient(data *dtos.BookingFilter, userId int) ([]*dtos.Booking, error) {
-	data.BusinessId = 0
-	data.ClientId = userId
-
-	return s.getList(data)
-}
-
-func (s *Booking) GetListByBusiness(data *dtos.BookingFilter) ([]*dtos.Booking, error) {
+func (s *Booking) GetListByBusiness(data *dtos.BookingFilter) ([]*dtos.BookingMini, error) {
 	data.ClientId = 0
 
-	return s.getList(data)
+	list, err := s.getList(data)
+	if err != nil {
+		return nil, err
+	}
+
+	listDto := make([]*dtos.BookingMini, len(list))
+	for i, booking := range list {
+		client, err := s.Repo.Users.GetByBusinessId(booking.BusinessId)
+		if err != nil {
+			return nil, err
+		}
+		listDto[i] = new(dtos.BookingMini).
+			MapFromModel(booking).
+			SetUser(client)
+	}
+
+	return listDto, nil
 }
 
 func (s *Booking) DeleteById(id int) error {

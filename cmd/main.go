@@ -82,6 +82,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		h := handlers.Business
 		business.POST("/create", mw.UserIDFromToken, h.Create)
 		business.GET("/get-me", mw.UserIDFromToken, h.GetMe)
+		business.GET("/profile/:id", h.GetProfile)
 		business.GET("/get-by-category/:id", h.GetByCategory)
 		business.PUT("/update-me", mw.UserIDFromToken, h.UpdateMe)
 		business.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
@@ -101,7 +102,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		booking.POST("/client/create", mw.UserIDFromToken, h.Create)
 
 		booking.GET("/client/get-list", mw.UserIDFromToken, h.GetListByClient)
-		booking.GET("/business/get-list/:business_id", h.GetListByBusiness)
+		booking.GET("/business/get-list/:business_id", h.GetListByBusinessId)
 
 		booking.DELETE("/client/delete/:id", mw.UserIDFromToken, h.DeleteByClient)
 		booking.DELETE("/business/delete/:id", mw.UserIDFromToken, h.DeleteByBusiness)

@@ -44,6 +44,22 @@ func (h *Business) GetMe(c *gin.Context) {
 	response.Success(c, res)
 }
 
+func (h *Business) GetProfile(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	res, err := h.Service.Business.GetProfileById(id)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, res)
+}
+
 func (h *Business) GetByCategory(c *gin.Context) {
 	categoryId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

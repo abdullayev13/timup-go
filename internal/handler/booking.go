@@ -67,7 +67,7 @@ func (h *Booking) GetListByClient(c *gin.Context) {
 	response.Success(c, res)
 }
 
-func (h *Booking) GetListByBusiness(c *gin.Context) {
+func (h *Booking) GetListByBusinessId(c *gin.Context) {
 	business_id, err := strconv.Atoi(c.Param("business_id"))
 	if err != nil {
 		response.FailErr(c, err)

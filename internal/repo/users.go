@@ -128,6 +128,19 @@ func (r *Users) GetById(id int) (*models.User, error) {
 
 	return model, nil
 }
+func (r *Users) GetByBusinessId(id int) (*models.User, error) {
+	model := new(models.User)
+
+	err := r.DB.Raw(`SELECT u.* FROM users u 
+JOIN business_profiles b on b.user_id=u.id 
+WHERE b.id = ?`, id).Find(model).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return model, nil
+}
 
 func (r *Users) Update(model *models.User) (*models.User, error) {
 	err := r.DB.Save(model).Error
