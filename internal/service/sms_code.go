@@ -17,6 +17,10 @@ type SmsCode struct {
 }
 
 func (s *SmsCode) SendSms(data *dtos.SendSmsReq) error {
+	if !utill.ValidPhoneNumber(data.PhoneNumber) {
+		return errors.New("PhoneNumber is not valid")
+	}
+
 	code := utill.Random6DigNum()
 	model := new(models.SmsCode)
 	model.PhoneNumber = data.PhoneNumber

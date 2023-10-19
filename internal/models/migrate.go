@@ -8,4 +8,5 @@ func AutoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&WorkCategory{})
 	db.AutoMigrate(&BusinessProfile{})
 	db.AutoMigrate(&Booking{})
+	db.AutoMigrate(&Following{})
 }

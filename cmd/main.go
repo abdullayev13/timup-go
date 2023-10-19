@@ -86,6 +86,11 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		business.GET("/get-by-category/:id", h.GetByCategory)
 		business.PUT("/update-me", mw.UserIDFromToken, h.UpdateMe)
 		business.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
+		// about following
+		fh := handlers.Following
+		business.POST("/:id/follow", mw.UserIDFromToken, fh.Create)
+		business.DELETE("/:id/unfollow", mw.UserIDFromToken, fh.DeleteByFollower)
+		business.GET("/followed/list", mw.UserIDFromToken, fh.GetBusinessList)
 	}
 
 	category := v1.Group("/category")

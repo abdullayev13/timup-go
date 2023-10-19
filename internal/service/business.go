@@ -3,6 +3,7 @@ package service
 import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/repo"
+	"abdullayev13/timeup/internal/utill"
 	"errors"
 )
 
@@ -58,7 +59,16 @@ func (s *Business) GetByGetByCategory(data *dtos.BusinessFilter) ([]*dtos.Busine
 		return nil, errors.New("category not given")
 	}
 
-	return s.Repo.Business.GetByCategory(data)
+	list, err := s.Repo.Business.GetByCategory(data)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range list {
+		list[i].PhotoUrl = utill.PutMediaDomain(list[i].PhotoUrl)
+	}
+
+	return list, nil
 }
 
 func (s *Business) Update(dto *dtos.BusinessProfile) (*dtos.BusinessProfile, error) {

@@ -50,6 +50,13 @@ type Booking struct {
 	Time       string `json:"time"`
 }
 
+type Following struct {
+	ID         int       `json:"id"`
+	BusinessId int       `json:"business_id"`
+	FollowerId int       `json:"follower_id"`
+	CreatedAt  time.Time `json:"created_at"`
+}
+
 func (d *User) MapFromUser(m *models.User) *User {
 	d.ID = m.ID
 	d.FistName = m.FistName
@@ -142,6 +149,26 @@ func (d *Booking) MapToModel() *models.Booking {
 	m.BusinessId = d.BusinessId
 	m.ClientId = d.ClientId
 	m.Date, _ = utill.Parse(d.Date, d.Time)
+
+	return m
+}
+
+func (d *Following) MapFromModel(m *models.Following) *Following {
+	d.ID = m.ID
+	d.BusinessId = m.BusinessId
+	d.FollowerId = m.FollowerId
+	d.CreatedAt = m.CreatedAt
+
+	return d
+}
+
+func (d *Following) MapToModel() *models.Following {
+	m := new(models.Following)
+
+	m.ID = d.ID
+	m.BusinessId = d.BusinessId
+	m.FollowerId = d.FollowerId
+	m.CreatedAt = d.CreatedAt
 
 	return m
 }

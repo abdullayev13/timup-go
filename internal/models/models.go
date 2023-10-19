@@ -47,3 +47,10 @@ type Booking struct {
 	ClientId   int
 	Date       time.Time
 }
+
+type Following struct {
+	ID         int
+	BusinessId int `gorm:"index:idx_following,unique;not null"`
+	FollowerId int `gorm:"index:idx_following,unique;not null"`
+	CreatedAt  time.Time
+}

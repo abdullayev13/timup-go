@@ -14,6 +14,10 @@ type Users struct {
 }
 
 func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
+	if !utill.ValidPhoneNumber(data.PhoneNumber) {
+		return nil, errors.New("PhoneNumber is not valid")
+	}
+
 	// TODO data.Address checking
 	smscode, err := s.Repo.SmsCode.LastByPhoneNumber(data.PhoneNumber)
 	if err != nil {
@@ -42,7 +46,12 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 		user.UserName = data.UserName
 		user.PhoneNumber = data.PhoneNumber
 		user.Address = data.Address
-		user.BirthDate = data.BirthDate
+
+		bd, err := utill.ParseDate(data.BirthDate)
+		if err != nil {
+			return nil, errors.New("err parsing BirthDate: " + err.Error())
+		}
+		user.BirthDate = &bd
 	}
 
 	user, err = s.Repo.Users.Create(user)

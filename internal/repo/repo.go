@@ -5,11 +5,12 @@ import (
 )
 
 type Repo struct {
-	Users    *Users
-	SmsCode  *SmsCode
-	Business *Business
-	Category *Category
-	Booking  *Booking
+	Users     *Users
+	SmsCode   *SmsCode
+	Business  *Business
+	Category  *Category
+	Booking   *Booking
+	Following *Following
 }
 
 func New(DB *gorm.DB) *Repo {
@@ -19,5 +20,6 @@ func New(DB *gorm.DB) *Repo {
 		&Business{DB},
 		&Category{DB},
 		&Booking{DB},
+		&Following{DB},
 	}
 }
