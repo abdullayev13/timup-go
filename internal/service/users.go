@@ -88,30 +88,39 @@ func (s *Users) GetById(userId int) (*dtos.User, error) {
 }
 
 func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
-	userModel, err := s.Repo.Users.GetById(userId)
+	fullData, err := s.Repo.Business.GetProfileByUserId(userId)
 	if err != nil {
 		return nil, err
 	}
 
-	userModel.PhotoUrl = utill.PutMediaDomain(userModel.PhotoUrl)
+	fullData.PhotoUrl = utill.PutMediaDomain(fullData.PhotoUrl)
 
 	dto := new(dtos.UserBusiness)
-	dto.MapFromModel(userModel)
-
-	businessModel, err := s.Repo.Business.GetByUserId(userId)
-	if err != nil {
+	{
+		dto.ID = fullData.UserID
+		dto.FistName = fullData.FistName
+		dto.LastName = fullData.LastName
+		dto.UserName = fullData.UserName
+		dto.PhoneNumber = fullData.PhoneNumber
+		dto.Address = fullData.Address
+		dto.PhotoUrl = fullData.PhotoUrl
+	}
+	if fullData.ID == 0 {
 		return dto, nil
 	}
 
-	var categoryName string
-	category, err := s.Repo.Category.GetById(businessModel.WorkCategoryId)
-	if err == nil {
-		categoryName = category.Name
-	}
-
 	dto.Business = new(dtos.BusinessProfile)
-	dto.Business.MapFromModel(businessModel)
-	dto.Business.SetCategoryName(categoryName)
+	{
+		dto.Business.ID = fullData.ID
+		dto.Business.UserID = fullData.UserID
+		dto.Business.CategoryId = fullData.CategoryId
+		dto.Business.CategoryName = fullData.CategoryName
+		dto.Business.OfficeAddress = fullData.OfficeAddress
+		dto.Business.OfficeName = fullData.OfficeName
+		dto.Business.Experience = fullData.Experience
+		dto.Business.Bio = fullData.Bio
+		dto.Business.DayOffs = fullData.DayOffs
+	}
 
 	return dto, nil
 }

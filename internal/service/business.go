@@ -108,26 +108,12 @@ func (s *Business) DeleteByUserId(userId int) error {
 //	other
 
 func (s *Business) GetProfileById(id int) (*dtos.BusinessData, error) {
-	model, err := s.Repo.Business.GetById(id)
+	dto, err := s.Repo.Business.GetProfileById(id)
 	if err != nil {
 		return nil, err
 	}
 
-	var categoryName string
-	category, err := s.Repo.Category.GetById(model.WorkCategoryId)
-	if err == nil {
-		categoryName = category.Name
-	}
-
-	user, err := s.Repo.Users.GetById(model.UserID)
-	if err != nil {
-		return nil, err
-	}
-
-	dto := new(dtos.BusinessData)
-	dto.MapFromModel(model)
-	dto.SetCategoryName(categoryName)
-	dto.SetUser(user)
+	dto.PhotoUrl = utill.PutMediaDomain(dto.PhotoUrl)
 
 	return dto, nil
 }

@@ -74,6 +74,7 @@ func (h *Business) GetByCategory(c *gin.Context) {
 		return
 	}
 
+	data.UserId = c.GetInt(config.UserIdKeyFromAuthMw)
 	data.CategoryId = categoryId
 	res, err := h.Service.Business.GetByGetByCategory(data)
 	if err != nil {

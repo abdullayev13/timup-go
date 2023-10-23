@@ -12,15 +12,35 @@ type BusinessMini struct {
 	FistName   string `json:"fist_name"`
 	LastName   string `json:"last_name"`
 	PhotoUrl   string `json:"photo_url"`
+	Followed   bool   `json:"followed"`
 }
 
 type BusinessFilter struct {
 	Limit      int `json:"limit" form:"limit"`
 	Offset     int `json:"offset" form:"offset"`
 	CategoryId int `json:"category_id" form:"category_id"`
+	UserId     int `json:"user_id" form:"user_id"`
 }
 
 type BusinessData struct {
+	ID            int    `json:"id"`
+	UserID        int    `json:"user_id"`
+	CategoryId    int    `json:"category_id,omitempty"`
+	CategoryName  string `json:"category_name"`
+	OfficeAddress string `json:"office_address"`
+	OfficeName    string `json:"office_name"`
+	Experience    int    `json:"experience"`
+	Bio           string `json:"bio"`
+	DayOffs       string `json:"day_offs"`
+	FistName      string `json:"fist_name"`
+	LastName      string `json:"last_name"`
+	UserName      string `json:"user_name"`
+	PhoneNumber   string `json:"phone_number"`
+	Address       string `json:"address"`
+	PhotoUrl      string `json:"photo_url"`
+}
+
+type BusinessFullData struct {
 	ID            int    `json:"id"`
 	UserID        int    `json:"user_id"`
 	CategoryId    int    `json:"category_id"`
