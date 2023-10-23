@@ -5,3 +5,6 @@
 
 shularni performancini oshirish uchun qury yozish
 yaxshilash
+
+add postgreas data to .env
+make it run with that data (postgres)
