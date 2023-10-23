@@ -1,2 +1,7 @@
     TODO
 
+/booking/client/get-list
+/booking/business/get-list/:business_id
+
+shularni performancini oshirish uchun qury yozish
+yaxshilash
