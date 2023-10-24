@@ -4,6 +4,7 @@ import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type Booking struct {
@@ -69,4 +70,71 @@ func (r *Booking) DeleteById(id int) error {
 	err := r.DB.Where("id = ?", id).Delete(model).Error
 
 	return err
+}
+
+// other
+
+func (r *Booking) GetListByClient(data *dtos.BookingFilter) ([]*dtos.BookingMini, error) {
+	query := []string{`SELECT b.*,
+       u.fist_name,
+       u.last_name,
+       u.user_name,
+       u.phone_number,
+       u.photo_url
+FROM bookings b
+         JOIN business_profiles bp ON bp.id = b.business_id
+         JOIN users u ON u.id = bp.user_id
+WHERE b.client_id = ?`}
+	args := []any{data.ClientId}
+
+	if data.BusinessId != 0 {
+		query = append(query, "AND business_id = ?")
+		args = append(args, data.BusinessId)
+	}
+	if data.Coming {
+		query = append(query, "AND date > now()")
+	}
+	if data.Date != "" {
+		query = append(query, "AND date::date = to_date(?, 'DD/MM/YYYY')")
+		args = append(args, data.Date)
+	}
+	query = append(query, "LIMIT ? OFFSET ?")
+	args = append(args, data.Limit, data.Offset)
+
+	res := make([]*dtos.BookingMini, 0, data.Limit)
+	err := r.DB.Raw(strings.Join(query, " "), args...).Find(&res).Error
+
+	return res, err
+}
+
+func (r *Booking) GetListByBusiness(data *dtos.BookingFilter) ([]*dtos.BookingMini, error) {
+	query := []string{`SELECT b.*,
+       u.fist_name,
+       u.last_name,
+       u.user_name,
+       u.phone_number,
+       u.photo_url
+FROM bookings b
+         JOIN users u ON u.id = b.client_id
+WHERE b.business_id = ?`}
+	args := []any{data.BusinessId}
+
+	if data.ClientId != 0 {
+		query = append(query, "AND client_id = ?")
+		args = append(args, data.ClientId)
+	}
+	if data.Coming {
+		query = append(query, "AND date > now()")
+	}
+	if data.Date != "" {
+		query = append(query, "AND date::date = to_date(?, 'DD/MM/YYYY')")
+		args = append(args, data.Date)
+	}
+	query = append(query, "LIMIT ? OFFSET ?")
+	args = append(args, data.Limit, data.Offset)
+
+	res := make([]*dtos.BookingMini, 0, data.Limit)
+	err := r.DB.Raw(strings.Join(query, " "), args...).Find(&res).Error
+
+	return res, err
 }

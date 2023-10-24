@@ -82,7 +82,7 @@ func (h *Booking) GetListByBusinessId(c *gin.Context) {
 	}
 
 	data.BusinessId = business_id
-	res, err := h.Service.Booking.GetListByBusiness(data)
+	res, err := h.Service.Booking.GetListByBusiness(data, business_id)
 	if err != nil {
 		response.FailErr(c, err)
 		return

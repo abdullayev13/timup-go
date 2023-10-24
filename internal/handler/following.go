@@ -53,7 +53,6 @@ func (h *Following) DeleteByFollower(c *gin.Context) {
 }
 
 func (h *Following) GetBusinessList(c *gin.Context) {
-	//	todo
 	data := new(dtos.FollowedFilter)
 	err := c.BindQuery(data)
 	if err != nil {

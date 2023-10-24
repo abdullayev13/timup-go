@@ -3,6 +3,7 @@ package dtos
 import (
 	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/utill"
+	"time"
 )
 
 type BookingFilter struct {
@@ -15,11 +16,12 @@ type BookingFilter struct {
 }
 
 type BookingMini struct {
-	ID         int    `json:"id"`
-	BusinessId int    `json:"business_id,omitempty"`
-	ClientId   int    `json:"client_id"`
-	Date       string `json:"date"`
-	Time       string `json:"time"`
+	ID         int       `json:"id"`
+	BusinessId int       `json:"business_id,omitempty"`
+	ClientId   int       `json:"client_id"`
+	Date       time.Time `json:"-"`
+	DateJson   string    `json:"date"`
+	Time       string    `json:"time"`
 
 	FistName    string `json:"fist_name"`
 	LastName    string `json:"last_name"`
@@ -32,7 +34,7 @@ func (d *BookingMini) MapFromModel(m *models.Booking) *BookingMini {
 	d.ID = m.ID
 	d.BusinessId = m.BusinessId
 	d.ClientId = m.ClientId
-	d.Date, d.Time = utill.Format(m.Date)
+	d.DateJson, d.Time = utill.Format(m.Date)
 
 	return d
 }
