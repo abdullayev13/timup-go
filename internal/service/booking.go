@@ -7,6 +7,7 @@ import (
 	"abdullayev13/timeup/internal/utill"
 	"errors"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Booking struct {
@@ -25,6 +26,10 @@ func (s *Booking) Create(data *dtos.Booking) (*dtos.Booking, error) {
 	}
 
 	model := data.MapToModel()
+
+	if model.Date.Before(time.Now()) {
+		return nil, errors.New("booking time is past or not given")
+	}
 
 	model, err = s.Repo.Booking.Create(model)
 	if err != nil {
