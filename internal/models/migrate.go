@@ -3,10 +3,10 @@ package models
 import "gorm.io/gorm"
 
 func AutoMigrate(db *gorm.DB) {
-	db.AutoMigrate(&SmsCode{})
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&WorkCategory{})
-	db.AutoMigrate(&BusinessProfile{})
-	db.AutoMigrate(&Booking{})
-	db.AutoMigrate(&Following{})
+	go db.AutoMigrate(&SmsCode{})
+	go db.AutoMigrate(&User{})
+	go db.AutoMigrate(&WorkCategory{})
+	go db.AutoMigrate(&BusinessProfile{})
+	go db.AutoMigrate(&Booking{})
+	go db.AutoMigrate(&Following{})
 }
