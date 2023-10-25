@@ -3,6 +3,7 @@ package repo
 import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
+	"errors"
 	"fmt"
 	"gorm.io/gorm"
 )
@@ -88,6 +89,10 @@ func (r *Business) GetProfileById(id int) (*dtos.BusinessData, error) {
 		return nil, err
 	}
 
+	if id != fullData.ID {
+		return nil, errors.New("not found")
+	}
+
 	dto := new(dtos.BusinessData)
 	{
 		dto.ID = fullData.ID
@@ -149,6 +154,9 @@ GROUP BY b.id, c.id, u.id`, whereQuery), args...).
 
 	if err != nil {
 		return nil, err
+	}
+	if dto.UserID == 0 {
+		return nil, errors.New("not fount")
 	}
 
 	return dto, nil
