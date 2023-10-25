@@ -82,6 +82,7 @@ func (s *Booking) GetListByClient(data *dtos.BookingFilter, userId int) ([]*dtos
 
 	for _, bus := range list {
 		bus.DateJson, bus.Time = utill.Format(bus.Date)
+		bus.PhotoUrl = utill.PutMediaDomain(bus.PhotoUrl)
 	}
 
 	return list, nil
@@ -100,6 +101,7 @@ func (s *Booking) GetListByBusiness(data *dtos.BookingFilter, businessId int) ([
 
 	for _, bus := range list {
 		bus.DateJson, bus.Time = utill.Format(bus.Date)
+		bus.PhotoUrl = utill.PutMediaDomain(bus.PhotoUrl)
 	}
 
 	return list, nil

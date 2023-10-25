@@ -93,6 +93,15 @@ func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
 		return nil, err
 	}
 
+	if fullData.UserID == 0 {
+		model, err := s.Repo.Users.GetById(userId)
+		if err != nil {
+			return nil, err
+		}
+		dto := new(dtos.UserBusiness).MapFromModel(model)
+		return dto, nil
+	}
+
 	fullData.PhotoUrl = utill.PutMediaDomain(fullData.PhotoUrl)
 
 	dto := new(dtos.UserBusiness)
