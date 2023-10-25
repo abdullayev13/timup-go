@@ -138,11 +138,10 @@ func (r *Business) GetFullDataBy(whereQuery string, args ...any) (*dtos.Business
        u.address,
        c.id      as category_id,
        c.name      as category_name,
-       count(f.id) as followers_count
+(SELECT count(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count
 FROM business_profiles b
          JOIN users u on b.user_id = u.id
          JOIN work_categories c on b.work_category_id = c.id
-         JOIN followings f on f.business_id = b.id
 WHERE %s
 GROUP BY b.id, c.id, u.id`, whereQuery), args...).
 		Find(dto).Error
