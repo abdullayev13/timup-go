@@ -129,6 +129,7 @@ func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
 		dto.Business.Experience = fullData.Experience
 		dto.Business.Bio = fullData.Bio
 		dto.Business.DayOffs = fullData.DayOffs
+		dto.Business.FollowersCount = fullData.FollowersCount
 	}
 
 	return dto, nil

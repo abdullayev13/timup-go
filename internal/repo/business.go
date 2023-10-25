@@ -105,6 +105,7 @@ func (r *Business) GetProfileById(id int) (*dtos.BusinessData, error) {
 		dto.PhoneNumber = fullData.PhoneNumber
 		dto.Address = fullData.Address
 		dto.PhotoUrl = fullData.PhotoUrl
+		dto.FollowersCount = fullData.FollowersCount
 	}
 
 	return dto, nil

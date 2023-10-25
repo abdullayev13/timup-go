@@ -31,15 +31,16 @@ type WorkCategory struct {
 }
 
 type BusinessProfile struct {
-	ID            int    `json:"id"`
-	UserID        int    `json:"user_id"`
-	CategoryId    int    `json:"category_id"`
-	CategoryName  string `json:"category_name"`
-	OfficeAddress string `json:"office_address"`
-	OfficeName    string `json:"office_name"`
-	Experience    int    `json:"experience"`
-	Bio           string `json:"bio"`
-	DayOffs       string `json:"day_offs"`
+	ID             int    `json:"id"`
+	UserID         int    `json:"user_id"`
+	CategoryId     int    `json:"category_id"`
+	CategoryName   string `json:"category_name"`
+	OfficeAddress  string `json:"office_address"`
+	OfficeName     string `json:"office_name"`
+	Experience     int    `json:"experience"`
+	Bio            string `json:"bio"`
+	DayOffs        string `json:"day_offs"`
+	FollowersCount int    `json:"followers_count"`
 }
 
 type Booking struct {
