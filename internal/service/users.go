@@ -89,11 +89,8 @@ func (s *Users) GetById(userId int) (*dtos.User, error) {
 
 func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
 	fullData, err := s.Repo.Business.GetProfileByUserId(userId)
-	if err != nil {
-		return nil, err
-	}
 
-	if fullData.UserID == 0 {
+	if err != nil || fullData.UserID == 0 {
 		model, err := s.Repo.Users.GetById(userId)
 		if err != nil {
 			return nil, err
