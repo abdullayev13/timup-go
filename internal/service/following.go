@@ -4,6 +4,7 @@ import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/repo"
 	"abdullayev13/timeup/internal/utill"
+	"errors"
 	"time"
 )
 
@@ -12,6 +13,11 @@ type Following struct {
 }
 
 func (s *Following) Create(data *dtos.Following) (*dtos.Following, error) {
+	sameOwner := s.Repo.Business.ExistsByIdAndUserId(data.BusinessId, data.FollowerId)
+	if sameOwner {
+		return nil, errors.New("following your self not allowed")
+	}
+
 	data.CreatedAt = time.Now()
 
 	model := data.MapToModel()

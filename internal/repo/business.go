@@ -162,3 +162,12 @@ GROUP BY b.id, c.id, u.id`, whereQuery), args...).
 	return dto, nil
 
 }
+
+func (r *Business) ExistsByIdAndUserId(id, userId int) bool {
+	var exists bool
+	r.DB.Model(&models.BusinessProfile{}).
+		Select("count(*) > 0").
+		Where("id=? AND user_id=?", id, userId).
+		Find(&exists)
+	return exists
+}
