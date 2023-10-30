@@ -13,6 +13,7 @@ type BusinessLI struct {
 	OfficeName    string `json:"office_name"`
 	Bio           string `json:"bio"`
 	DayOffs       string `json:"day_offs"`
+	UserID        int    `json:"user_id"`
 	FistName      string `json:"fist_name"`
 	LastName      string `json:"last_name"`
 	UserName      string `json:"user_name"`

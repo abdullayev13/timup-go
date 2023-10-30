@@ -19,9 +19,9 @@ func (r *Following) Create(model *models.Following) (*models.Following, error) {
 func (r *Following) GetBusinessList(data *dtos.FollowedFilter) ([]*dtos.BusinessLI, error) {
 	listModel := make([]*dtos.BusinessLI, 0)
 
-	err := r.DB.Raw(`SELECT b.id   as business_id,
+	err := r.DB.Raw(`SELECT b.id,
        c.name as category_name, 
-       b.office_address, b.office_name, b.bio, b.day_offs,
+       b.office_address, b.office_name, b.bio, b.day_offs, b.user_id,
        u.fist_name, u.user_name, u.last_name, u.phone_number, u.photo_url
 FROM users u
          JOIN business_profiles b on b.user_id = u.id
