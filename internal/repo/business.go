@@ -163,11 +163,19 @@ GROUP BY b.id, c.id, u.id`, whereQuery), args...).
 
 }
 
+func (r *Business) ExistsById(id int) bool {
+	return r.exists("id=?", id)
+}
+
 func (r *Business) ExistsByIdAndUserId(id, userId int) bool {
+	return r.exists("id=? AND user_id=?", id, userId)
+}
+
+func (r *Business) exists(whereQuery string, args ...any) bool {
 	var exists bool
 	r.DB.Model(&models.BusinessProfile{}).
 		Select("count(*) > 0").
-		Where("id=? AND user_id=?", id, userId).
+		Where(whereQuery, args...).
 		Find(&exists)
 	return exists
 }

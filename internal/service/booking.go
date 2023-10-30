@@ -6,7 +6,6 @@ import (
 	"abdullayev13/timeup/internal/repo"
 	"abdullayev13/timeup/internal/utill"
 	"errors"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -17,13 +16,11 @@ type Booking struct {
 func (s *Booking) Create(data *dtos.Booking) (*dtos.Booking, error) {
 	data.ID = 0
 
-	_, err := s.Repo.Business.GetById(data.BusinessId)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("business not found")
-		}
-		return nil, err
+	exists := s.Repo.Business.ExistsById(data.BusinessId)
+	if !exists {
+		return nil, errors.New("business not found")
 	}
+	var err error
 
 	model := data.MapToModel()
 
