@@ -33,6 +33,8 @@ func (s *SmsCode) SendSms(data *dtos.SendSmsReq) error {
 		return err
 	}
 
+	go utill.SendSmsCode(data.PhoneNumber, code)
+
 	return nil
 }
 

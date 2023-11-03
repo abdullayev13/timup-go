@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -51,6 +52,12 @@ func main() {
 
 func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 	v1 := r.Group("/api/v1")
+
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "Server is running!!!",
+		})
+	})
 
 	sms := v1.Group("/sms")
 	{
