@@ -11,6 +11,7 @@ type Repo struct {
 	Category  *Category
 	Booking   *Booking
 	Following *Following
+	Post      *Post
 }
 
 func New(DB *gorm.DB) *Repo {
@@ -21,5 +22,6 @@ func New(DB *gorm.DB) *Repo {
 		&Category{DB},
 		&Booking{DB},
 		&Following{DB},
+		&Post{DB},
 	}
 }

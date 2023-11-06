@@ -9,7 +9,6 @@ type Region struct {
 }
 
 func (h *Region) Get(c *gin.Context) {
-
 	response.Success(c, region)
 }
 

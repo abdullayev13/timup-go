@@ -98,7 +98,7 @@ WHERE b.client_id = ?`}
 		query = append(query, "AND date::date = to_date(?, 'DD/MM/YYYY')")
 		args = append(args, data.Date)
 	}
-	query = append(query, "LIMIT ? OFFSET ?")
+	query = append(query, "ORDER BY b.date LIMIT ? OFFSET ?")
 	args = append(args, data.Limit, data.Offset)
 
 	res := make([]*dtos.BookingMini, 0, data.Limit)
@@ -130,7 +130,7 @@ WHERE b.business_id = ?`}
 		query = append(query, "AND date::date = to_date(?, 'DD/MM/YYYY')")
 		args = append(args, data.Date)
 	}
-	query = append(query, "LIMIT ? OFFSET ?")
+	query = append(query, "ORDER BY b.date LIMIT ? OFFSET ?")
 	args = append(args, data.Limit, data.Offset)
 
 	res := make([]*dtos.BookingMini, 0, data.Limit)

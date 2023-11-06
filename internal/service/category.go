@@ -10,6 +10,7 @@ type Category struct {
 }
 
 func (s *Category) Create(data *dtos.WorkCategory) (*dtos.WorkCategory, error) {
+	data.ID = 0
 	model := data.MapToModel()
 
 	model, err := s.Repo.Category.Create(model)

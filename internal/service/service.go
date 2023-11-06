@@ -12,6 +12,7 @@ type Service struct {
 	Category  *Category
 	Booking   *Booking
 	Following *Following
+	Post      *Post
 }
 
 func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
@@ -23,5 +24,6 @@ func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
 		&Category{repository},
 		&Booking{repository},
 		&Following{repository},
+		&Post{repository},
 	}
 }

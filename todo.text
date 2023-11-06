@@ -1,2 +1,6 @@
     TODO
-
+/post:
+    /create
+    /update
+    /list/:business_id
+    /get/:id

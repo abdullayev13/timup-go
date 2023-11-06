@@ -134,7 +134,6 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		dev.GET("/booking/get-list", handlers.Booking.GetList)
 		booking.GET("/dev/delete/:id", handlers.Booking.DeleteById)
 	}
-
 }
 
 func init() {

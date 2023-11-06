@@ -1,6 +1,7 @@
 package service
 
 import (
+	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/repo"
@@ -18,7 +19,6 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 		return nil, errors.New("PhoneNumber is not valid")
 	}
 
-	// TODO data.Address checking
 	smscode, err := s.Repo.SmsCode.LastByPhoneNumber(data.PhoneNumber)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 
 	var photoUrl string
 	if data.ProfilePhoto != nil {
-		photoUrl, err = utill.Upload(data.ProfilePhoto, "profilephoto")
+		photoUrl, err = utill.Upload(data.ProfilePhoto, config.ProfilePhotoDir)
 		if err != nil {
 			return nil, err
 		}

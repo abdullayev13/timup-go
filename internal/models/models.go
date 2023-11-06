@@ -54,3 +54,21 @@ type Following struct {
 	FollowerId int `gorm:"index:idx_following,unique;not null"`
 	CreatedAt  time.Time
 }
+
+type Post struct {
+	Id          int
+	MediaType   MediaType
+	PhotoPath   string
+	VideoPath   string
+	Title       string
+	Description string
+	BusinessId  int
+	CreatedAt   time.Time
+}
+
+type MediaType string
+
+const (
+	Video MediaType = "video"
+	Photo MediaType = "photo"
+)

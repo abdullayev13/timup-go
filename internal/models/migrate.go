@@ -9,4 +9,5 @@ func AutoMigrate(db *gorm.DB) {
 	go db.AutoMigrate(&BusinessProfile{})
 	go db.AutoMigrate(&Booking{})
 	go db.AutoMigrate(&Following{})
+	go db.AutoMigrate(&Post{})
 }
