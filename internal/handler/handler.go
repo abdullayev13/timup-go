@@ -14,6 +14,7 @@ type Handlers struct {
 	Region    *Region
 	Booking   *Booking
 	Following *Following
+	Post      *Post
 }
 
 func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
@@ -26,5 +27,6 @@ func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
 		&Region{},
 		&Booking{serv},
 		&Following{serv},
+		&Post{serv},
 	}
 }
