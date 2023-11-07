@@ -27,7 +27,7 @@ type PostFile struct {
 	Title       string                `form:"title"`
 	Description string                `form:"description"`
 	BusinessId  int                   `form:"business_id"`
-	CreatedAt   time.Time             `form:"created_at"`
+	CreatedAt   time.Time             `form:"-"`
 }
 
 type PostFilter struct {
@@ -40,8 +40,8 @@ type PostFilter struct {
 type PostDetail struct {
 	Id             int              `form:"id"`
 	MediaType      models.MediaType `form:"media_type"`
-	Photo          string           `form:"photo"`
-	Video          string           `form:"video"`
+	PhotoPath      string           `form:"photo"`
+	VideoPath      string           `form:"video"`
 	Title          string           `form:"title"`
 	Description    string           `form:"description"`
 	BusinessId     int              `form:"business_id"`

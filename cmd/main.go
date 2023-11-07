@@ -9,12 +9,13 @@ import (
 	"abdullayev13/timeup/internal/repo"
 	"abdullayev13/timeup/internal/service"
 	"abdullayev13/timeup/internal/utill"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -126,7 +127,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		post.POST("/create", mw.UserIDFromToken, h.Create)
 		post.GET("/get/:id", mw.UserIDFromToken, h.GetDetail)
 		post.GET("/list/:business_id", h.GetList)
-		post.PUT("/update", mw.UserIDFromToken, h.Update)
+		post.PUT("/update/:id", mw.UserIDFromToken, h.Update)
 		post.DELETE("/delete/:id", mw.UserIDFromToken, h.DeleteById)
 	}
 

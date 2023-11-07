@@ -95,7 +95,7 @@ func (r *Post) GetMiniList(data *dtos.PostFilter) ([]*models.Post, error) {
            ELSE SUBSTRING(description, 1, 61) || '...'
            END AS description,
        business_id
-FROM posts p`}
+FROM posts p WHERE TRUE`}
 	args := []any{}
 
 	if data.BusinessId != 0 {

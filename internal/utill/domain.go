@@ -25,3 +25,15 @@ func PutMediaDomain(path string) string {
 
 	return path
 }
+
+func PutMediaPostDomain(path string) string {
+	if path == "" {
+		return ""
+	}
+
+	if path[0] == '/' {
+		return config.Domain + "/api/v1" + path
+	}
+
+	return path
+}
