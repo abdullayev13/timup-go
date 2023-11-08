@@ -52,6 +52,7 @@ func (s *Post) Create(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 	res := new(dtos.Post)
 	res.MapFromModel(model)
 	res.Photo = utill.PutMediaPostDomain(res.Photo)
+	res.Video = utill.PutMediaPostDomain(res.Video)
 
 	return res, nil
 }
@@ -72,6 +73,7 @@ func (s *Post) GetList(data *dtos.PostFilter) ([]*dtos.Post, error) {
 			MapFromModel(model)
 
 		post.Photo = utill.PutMediaPostDomain(post.Photo)
+		post.Video = utill.PutMediaPostDomain(post.Video)
 		listDto[i] = post
 	}
 
@@ -85,6 +87,7 @@ func (s *Post) GetDetail(id int) (*dtos.PostDetail, error) {
 	}
 
 	dto.PhotoPath = utill.PutMediaPostDomain(dto.PhotoPath)
+	dto.VideoPath = utill.PutMediaPostDomain(dto.VideoPath)
 	dto.PosterPhotoUrl = utill.PutMediaDomain(dto.PosterPhotoUrl)
 
 	return dto, nil
@@ -147,6 +150,7 @@ func (s *Post) Update(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 	res := new(dtos.Post)
 	res.MapFromModel(model)
 	res.Photo = utill.PutMediaPostDomain(res.Photo)
+	res.Video = utill.PutMediaPostDomain(res.Video)
 
 	return res, nil
 }
