@@ -31,23 +31,23 @@ type PostFile struct {
 }
 
 type PostFilter struct {
-	Limit      int
-	Offset     int
-	BusinessId int
-	MediaType  models.MediaType
+	Limit      int              `json:"limit" form:"limit"`
+	Offset     int              `json:"offset" form:"offset"`
+	BusinessId int              `json:"business_id" form:"business_id"`
+	MediaType  models.MediaType `json:"media_type" form:"media_type"`
 }
 
 type PostDetail struct {
-	Id             int              `form:"id"`
-	MediaType      models.MediaType `form:"media_type"`
-	PhotoPath      string           `form:"photo"`
-	VideoPath      string           `form:"video"`
-	Title          string           `form:"title"`
-	Description    string           `form:"description"`
-	BusinessId     int              `form:"business_id"`
-	CreatedAt      time.Time        `form:"created_at"`
-	PosterPhotoUrl string           `form:"poster_photo_url"`
-	PosterName     string           `form:"poster_name"`
+	Id             int              `json:"id" form:"id"`
+	MediaType      models.MediaType `json:"media_type" form:"media_type"`
+	PhotoPath      string           `json:"photo" form:"photo"`
+	VideoPath      string           `json:"video" form:"video"`
+	Title          string           `json:"title" form:"title"`
+	Description    string           `json:"description" form:"description"`
+	BusinessId     int              `json:"business_id" form:"business_id"`
+	CreatedAt      time.Time        `json:"created_at" form:"created_at"`
+	PosterPhotoUrl string           `json:"poster_photo_url" form:"poster_photo_url"`
+	PosterName     string           `json:"poster_name" form:"poster_name"`
 }
 
 func (d *PostFile) MapToModel() *models.Post {
