@@ -88,14 +88,14 @@ WHERE b.client_id = ?`}
 	args := []any{data.ClientId}
 
 	if data.BusinessId != 0 {
-		query = append(query, "AND business_id = ?")
+		query = append(query, "AND b.business_id = ?")
 		args = append(args, data.BusinessId)
 	}
 	if data.Coming {
-		query = append(query, "AND date > now()")
+		query = append(query, "AND b.date > now()")
 	}
 	if data.Date != "" {
-		query = append(query, "AND date::date = to_date(?, 'DD/MM/YYYY')")
+		query = append(query, "AND b.date::date = to_date(?, 'DD/MM/YYYY')")
 		args = append(args, data.Date)
 	}
 	query = append(query, "ORDER BY b.date LIMIT ? OFFSET ?")
@@ -120,14 +120,14 @@ WHERE b.business_id = ?`}
 	args := []any{data.BusinessId}
 
 	if data.ClientId != 0 {
-		query = append(query, "AND client_id = ?")
+		query = append(query, "AND b.client_id = ?")
 		args = append(args, data.ClientId)
 	}
 	if data.Coming {
-		query = append(query, "AND date > now()")
+		query = append(query, "AND b.date > now()")
 	}
 	if data.Date != "" {
-		query = append(query, "AND date::date = to_date(?, 'DD/MM/YYYY')")
+		query = append(query, "AND b.date::date = to_date(?, 'DD/MM/YYYY')")
 		args = append(args, data.Date)
 	}
 	query = append(query, "ORDER BY b.date LIMIT ? OFFSET ?")
