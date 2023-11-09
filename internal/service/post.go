@@ -117,12 +117,12 @@ func (s *Post) Update(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 	switch data.MediaType {
 	case models.Photo:
 		model.VideoPath = ""
-		model.MediaType = models.Photo
+		model.MediaType = string(models.Photo)
 	case models.Video:
 		if data.Video == nil || model.VideoPath == "" {
 			return nil, errors.New("video not found")
 		}
-		model.MediaType = models.Video
+		model.MediaType = string(models.Video)
 	default:
 		return nil, errors.New("media_type not found")
 	}
@@ -139,7 +139,7 @@ func (s *Post) Update(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 		if err != nil {
 			return nil, fmt.Errorf("error uploading video: %s", err.Error())
 		}
-		model.MediaType = models.Video
+		model.MediaType = string(models.Video)
 	}
 
 	model, err = s.Repo.Post.Update(model)

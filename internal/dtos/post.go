@@ -60,7 +60,7 @@ func (d *PostFile) MapToModel() *models.Post {
 	m.Description = d.Description
 	m.BusinessId = d.BusinessId
 	m.CreatedAt = d.CreatedAt
-	m.MediaType = d.MediaType
+	m.MediaType = string(d.MediaType)
 
 	return m
 }
@@ -74,7 +74,7 @@ func (d *Post) MapFromModel(m *models.Post) *Post {
 	d.Description = m.Description
 	d.BusinessId = m.BusinessId
 	d.CreatedAt = m.CreatedAt
-	d.MediaType = m.MediaType
+	d.MediaType = models.MediaType(m.MediaType)
 
 	return d
 }

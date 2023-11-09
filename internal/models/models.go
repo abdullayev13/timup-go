@@ -57,7 +57,7 @@ type Following struct {
 
 type Post struct {
 	Id          int
-	MediaType   MediaType
+	MediaType   string
 	PhotoPath   string
 	VideoPath   string
 	Title       string
