@@ -39,6 +39,7 @@ type BusinessData struct {
 	Address        string `json:"address"`
 	PhotoUrl       string `json:"photo_url"`
 	FollowersCount int    `json:"followers_count"`
+	Followed       bool   `json:"followed"`
 }
 
 type BusinessFullData struct {

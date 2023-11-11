@@ -1,8 +1,3 @@
     TODO
-/post:
-    /create
-    /get/:id
-    /list/:business_id
-    /update
 
-{{host}}/api/v1/business/profile/{{business_id}}    followed field
+check is booking lists working correctly

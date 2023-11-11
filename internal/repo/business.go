@@ -83,34 +83,42 @@ func (r *Business) DeleteByUserId(userId int) error {
 
 //	others
 
-func (r *Business) GetProfileById(id int) (*dtos.BusinessData, error) {
-	fullData, err := r.GetFullDataBy("b.id=?", id)
+func (r *Business) GetProfileById(id, viewerId int) (*dtos.BusinessData, error) {
+	dto := new(dtos.BusinessData)
+
+	err := r.DB.Raw(`SELECT b.id,
+       b.office_address,
+       b.office_name,
+       b.experience,
+       b.bio,
+       b.day_offs,
+       b.user_id,
+       u.fist_name,
+       u.user_name,
+       u.last_name,
+       u.phone_number,
+       u.photo_url,
+       u.address,
+       c.id                                                              as category_id,
+       c.name                                                            as category_name,
+       (SELECT count(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count,
+       exists(SELECT f.id FROM followings f WHERE f.business_id = b.id
+            AND f.follower_id = ?) as followed
+FROM business_profiles b
+         JOIN users u on b.user_id = u.id
+         JOIN work_categories c on b.work_category_id = c.id
+WHERE b.id = ?
+GROUP BY b.id, c.id, u.id`, viewerId, id).
+		Find(dto).Error
+
 	if err != nil {
 		return nil, err
 	}
-
-	if id != fullData.ID {
-		return nil, errors.New("not found")
+	if dto.UserID == 0 {
+		return nil, errors.New("not fount")
 	}
-
-	dto := new(dtos.BusinessData)
-	{
-		dto.ID = fullData.ID
-		dto.UserID = fullData.UserID
-		dto.CategoryId = fullData.CategoryId
-		dto.CategoryName = fullData.CategoryName
-		dto.OfficeAddress = fullData.OfficeAddress
-		dto.OfficeName = fullData.OfficeName
-		dto.Experience = fullData.Experience
-		dto.Bio = fullData.Bio
-		dto.DayOffs = fullData.DayOffs
-		dto.FistName = fullData.FistName
-		dto.LastName = fullData.LastName
-		dto.UserName = fullData.UserName
-		dto.PhoneNumber = fullData.PhoneNumber
-		dto.Address = fullData.Address
-		dto.PhotoUrl = fullData.PhotoUrl
-		dto.FollowersCount = fullData.FollowersCount
+	if id != dto.ID {
+		return nil, errors.New("not found")
 	}
 
 	return dto, nil

@@ -47,3 +47,10 @@ func setIfExists(ptr *string, key string) bool {
 	}
 	return ok
 }
+
+func IsDbBlank() bool {
+	return DbHost == "" &&
+		DbUsername == "" &&
+		DbName == "" &&
+		DbPassword == ""
+}

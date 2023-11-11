@@ -51,7 +51,9 @@ func (h *Business) GetProfile(c *gin.Context) {
 		return
 	}
 
-	res, err := h.Service.Business.GetProfileById(id)
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+
+	res, err := h.Service.Business.GetProfileById(id, userId)
 	if err != nil {
 		response.FailErr(c, err)
 		return

@@ -107,8 +107,8 @@ func (s *Business) DeleteByUserId(userId int) error {
 
 //	other
 
-func (s *Business) GetProfileById(id int) (*dtos.BusinessData, error) {
-	dto, err := s.Repo.Business.GetProfileById(id)
+func (s *Business) GetProfileById(id, viewerId int) (*dtos.BusinessData, error) {
+	dto, err := s.Repo.Business.GetProfileById(id, viewerId)
 	if err != nil {
 		return nil, err
 	}

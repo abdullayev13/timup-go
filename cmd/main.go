@@ -90,7 +90,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		h := handlers.Business
 		business.POST("/create", mw.UserIDFromToken, h.Create)
 		business.GET("/get-me", mw.UserIDFromToken, h.GetMe)
-		business.GET("/profile/:id", h.GetProfile)
+		business.GET("/profile/:id", mw.UserIDFromToken, h.GetProfile)
 		business.GET("/get-by-category/:id", mw.UserIDFromToken, h.GetByCategory)
 		business.PUT("/update-me", mw.UserIDFromToken, h.UpdateMe)
 		business.DELETE("/delete-me", mw.UserIDFromToken, h.DeleteMe)
