@@ -42,7 +42,9 @@ func (h *Post) GetDetail(c *gin.Context) {
 		return
 	}
 
-	res, err := h.Service.Post.GetDetail(id)
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+
+	res, err := h.Service.Post.GetDetail(id, userId)
 	if err != nil {
 		response.FailErr(c, err)
 		return
@@ -115,4 +117,25 @@ func (h *Post) DeleteById(c *gin.Context) {
 	}
 
 	response.Success(c, "ok")
+}
+
+// others
+
+func (h *Post) GetListFollowed(c *gin.Context) {
+	data := new(dtos.PostFilter)
+	err := c.BindQuery(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+
+	res, err := h.Service.Post.GetListFollowed(data, userId)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, res)
 }

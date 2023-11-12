@@ -127,6 +127,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		post.POST("/create", mw.UserIDFromToken, h.Create)
 		post.GET("/get/:id", mw.UserIDFromToken, h.GetDetail)
 		post.GET("/list/:business_id", h.GetList)
+		post.GET("/list/followed-profiles", mw.UserIDFromToken, h.GetListFollowed)
 		post.PUT("/update/:id", mw.UserIDFromToken, h.Update)
 		post.DELETE("/delete/:id", mw.UserIDFromToken, h.DeleteById)
 	}

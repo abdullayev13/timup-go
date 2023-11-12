@@ -80,10 +80,16 @@ func (s *Post) GetList(data *dtos.PostFilter) ([]*dtos.Post, error) {
 	return listDto, nil
 }
 
-func (s *Post) GetDetail(id int) (*dtos.PostDetail, error) {
+func (s *Post) GetDetail(id, userId int) (*dtos.PostDetail, error) {
 	dto, err := s.Repo.Post.GetDetail(id)
 	if err != nil {
 		return nil, err
+	}
+	{
+		pv := new(models.PostViewed)
+		pv.PostId = dto.Id
+		pv.ViewerUserId = userId
+		go s.Repo.PostViewed.Create(pv)
 	}
 
 	dto.PhotoPath = utill.PutMediaPostDomain(dto.PhotoPath)
@@ -166,4 +172,25 @@ func (s *Post) DeleteById(id int, userId int) error {
 	}
 
 	return s.Repo.Post.DeleteById(id)
+}
+
+// other
+
+func (s *Post) GetListFollowed(data *dtos.PostFilter, userId int) ([]*dtos.PostDetail, error) {
+	if data.Limit == 0 {
+		data.Limit = 100
+	}
+
+	list, err := s.Repo.Post.GetListFollowed(data, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, model := range list {
+		model.PhotoPath = utill.PutMediaPostDomain(model.PhotoPath)
+		model.VideoPath = utill.PutMediaPostDomain(model.VideoPath)
+		model.PosterPhotoUrl = utill.PutMediaPostDomain(model.PosterPhotoUrl)
+	}
+
+	return list, nil
 }

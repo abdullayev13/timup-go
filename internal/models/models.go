@@ -66,6 +66,13 @@ type Post struct {
 	CreatedAt   time.Time
 }
 
+type PostViewed struct {
+	Id           int
+	PostId       int `gorm:"index:idx_post_viewer,unique;not null"`
+	ViewerUserId int `gorm:"index:idx_post_viewer,unique;not null"`
+	CreatedAt    time.Time
+}
+
 type MediaType string
 
 const (

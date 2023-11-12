@@ -114,3 +114,27 @@ FROM posts p WHERE TRUE`}
 
 	return res, err
 }
+
+func (r *Post) GetListFollowed(data *dtos.PostFilter, userId int) ([]*dtos.PostDetail, error) {
+	query := []string{`SELECT p.*,
+       u.photo_url                       as poster_photo_url,
+       u.fist_name || ' ' || u.last_name as poster_name
+FROM posts p
+         JOIN business_profiles b on p.business_id = b.id
+         JOIN users u on b.user_id = u.id
+         JOIN followings f on f.business_id = b.id
+WHERE f.follower_id = ?`}
+	args := []any{userId}
+
+	if data.MediaType != "" {
+		query = append(query, "AND p.media_type > ?")
+		args = append(args, data.MediaType)
+	}
+	query = append(query, "ORDER BY p.created_at DESC LIMIT ? OFFSET ?")
+	args = append(args, data.Limit, data.Offset)
+
+	res := make([]*dtos.PostDetail, 0, data.Limit)
+	err := r.DB.Raw(strings.Join(query, " "), args...).Find(&res).Error
+
+	return res, err
+}
