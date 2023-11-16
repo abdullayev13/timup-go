@@ -4,7 +4,6 @@ import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"errors"
-	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -101,6 +100,7 @@ func (r *Business) GetProfileById(id, viewerId int) (*dtos.BusinessData, error) 
        u.address,
        c.id                                                              as category_id,
        c.name                                                            as category_name,
+       (SELECT count(f.id) FROM followings f WHERE f.follower_id = u.id) as following_count,
        (SELECT count(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count,
        exists(SELECT f.id FROM followings f WHERE f.business_id = b.id
             AND f.follower_id = ?) as followed
@@ -125,39 +125,30 @@ GROUP BY b.id, c.id, u.id`, viewerId, id).
 }
 
 func (r *Business) GetProfileByUserId(userId int) (*dtos.BusinessFullData, error) {
-	fullData, err := r.GetFullDataBy("u.id=?", userId)
-	if err != nil {
-		return nil, err
-	}
-
-	return fullData, nil
-}
-
-func (r *Business) GetFullDataBy(whereQuery string, args ...any) (*dtos.BusinessFullData, error) {
 	dto := new(dtos.BusinessFullData)
 
-	err := r.DB.Raw(
-		fmt.Sprintf(`SELECT b.id,
+	err := r.DB.Raw(`SELECT b.id,
        b.office_address,
        b.office_name,
        b.experience,
        b.bio,
        b.day_offs,
-       b.user_id,
+       u.id                                                              as user_id,
        u.fist_name,
        u.user_name,
        u.last_name,
        u.phone_number,
        u.photo_url,
        u.address,
-       c.id      as category_id,
-       c.name      as category_name,
-(SELECT count(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count
-FROM business_profiles b
-         JOIN users u on b.user_id = u.id
-         JOIN work_categories c on b.work_category_id = c.id
-WHERE %s
-GROUP BY b.id, c.id, u.id`, whereQuery), args...).
+       c.id                                                              as category_id,
+       c.name                                                            as category_name,
+       (SELECT COUNT(f.id) FROM followings f WHERE f.follower_id = u.id) as following_count,
+       (SELECT COUNT(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count
+FROM users u
+         LEFT JOIN business_profiles b ON b.user_id = u.id
+         LEFT JOIN work_categories c ON b.work_category_id = c.id
+WHERE u.id = 33
+GROUP BY b.id, c.id, u.id`, userId).
 		Find(dto).Error
 
 	if err != nil {
@@ -168,7 +159,6 @@ GROUP BY b.id, c.id, u.id`, whereQuery), args...).
 	}
 
 	return dto, nil
-
 }
 
 func (r *Business) ExistsById(id int) bool {

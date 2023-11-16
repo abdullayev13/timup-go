@@ -186,10 +186,10 @@ func (s *Post) GetListFollowed(data *dtos.PostFilter, userId int) ([]*dtos.PostD
 		return nil, err
 	}
 
-	for _, model := range list {
-		model.PhotoPath = utill.PutMediaPostDomain(model.PhotoPath)
-		model.VideoPath = utill.PutMediaPostDomain(model.VideoPath)
-		model.PosterPhotoUrl = utill.PutMediaPostDomain(model.PosterPhotoUrl)
+	for _, dto := range list {
+		dto.PhotoPath = utill.PutMediaPostDomain(dto.PhotoPath)
+		dto.VideoPath = utill.PutMediaPostDomain(dto.VideoPath)
+		dto.PosterPhotoUrl = utill.PutMediaPostDomain(dto.PosterPhotoUrl)
 	}
 
 	return list, nil
