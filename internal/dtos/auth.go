@@ -25,14 +25,15 @@ type RegisterRes struct {
 }
 
 type UserBusiness struct {
-	ID          int              `json:"id"`
-	FistName    string           `json:"fist_name"`
-	LastName    string           `json:"last_name"`
-	UserName    string           `json:"user_name"`
-	PhoneNumber string           `json:"phone_number"`
-	Address     string           `json:"address"`
-	PhotoUrl    string           `json:"photo_url"`
-	Business    *BusinessProfile `json:"business"`
+	ID             int              `json:"id"`
+	FistName       string           `json:"fist_name"`
+	LastName       string           `json:"last_name"`
+	UserName       string           `json:"user_name"`
+	PhoneNumber    string           `json:"phone_number"`
+	Address        string           `json:"address"`
+	PhotoUrl       string           `json:"photo_url"`
+	FollowingCount int              `json:"following_count"`
+	Business       *BusinessProfile `json:"business"`
 }
 
 func (d *UserBusiness) MapFromModel(m *models.User) *UserBusiness {

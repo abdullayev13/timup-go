@@ -110,6 +110,7 @@ func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
 		dto.PhoneNumber = fullData.PhoneNumber
 		dto.Address = fullData.Address
 		dto.PhotoUrl = fullData.PhotoUrl
+		dto.FollowingCount = fullData.FollowingCount
 	}
 	if fullData.ID == 0 {
 		return dto, nil
