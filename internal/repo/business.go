@@ -147,7 +147,7 @@ func (r *Business) GetProfileByUserId(userId int) (*dtos.BusinessFullData, error
 FROM users u
          LEFT JOIN business_profiles b ON b.user_id = u.id
          LEFT JOIN work_categories c ON b.work_category_id = c.id
-WHERE u.id = 33
+WHERE u.id = ?
 GROUP BY b.id, c.id, u.id`, userId).
 		Find(dto).Error
 
