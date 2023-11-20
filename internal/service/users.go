@@ -128,6 +128,7 @@ func (s *Users) GetUserBusiness(userId int) (*dtos.UserBusiness, error) {
 		dto.Business.Bio = fullData.Bio
 		dto.Business.DayOffs = fullData.DayOffs
 		dto.Business.FollowersCount = fullData.FollowersCount
+		dto.Business.PostsCount = fullData.PostsCount
 	}
 
 	return dto, nil

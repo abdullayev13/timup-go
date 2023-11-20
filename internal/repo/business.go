@@ -102,8 +102,8 @@ func (r *Business) GetProfileById(id, viewerId int) (*dtos.BusinessData, error) 
        c.name                                                            as category_name,
        (SELECT count(f.id) FROM followings f WHERE f.follower_id = u.id) as following_count,
        (SELECT count(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count,
-       exists(SELECT f.id FROM followings f WHERE f.business_id = b.id
-            AND f.follower_id = ?) as followed
+       exists(SELECT f.id FROM followings f WHERE f.business_id = b.id AND f.follower_id = ?) as followed,
+        (SELECT count(p.id) FROM posts p WHERE p.business_id = b.id)      as posts_count
 FROM business_profiles b
          JOIN users u on b.user_id = u.id
          JOIN work_categories c on b.work_category_id = c.id
@@ -143,7 +143,8 @@ func (r *Business) GetProfileByUserId(userId int) (*dtos.BusinessFullData, error
        c.id                                                              as category_id,
        c.name                                                            as category_name,
        (SELECT COUNT(f.id) FROM followings f WHERE f.follower_id = u.id) as following_count,
-       (SELECT COUNT(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count
+       (SELECT COUNT(f.id) FROM followings f WHERE f.business_id = b.id) as followers_count,
+       (SELECT count(p.id) FROM posts p WHERE p.business_id = b.id)      as posts_count
 FROM users u
          LEFT JOIN business_profiles b ON b.user_id = u.id
          LEFT JOIN work_categories c ON b.work_category_id = c.id

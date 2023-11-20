@@ -41,6 +41,7 @@ type BusinessData struct {
 	FollowingCount int    `json:"following_count"`
 	FollowersCount int    `json:"followers_count"`
 	Followed       bool   `json:"followed"`
+	PostsCount     int    `json:"posts_count"`
 }
 
 type BusinessFullData struct {
@@ -61,6 +62,7 @@ type BusinessFullData struct {
 	PhotoUrl       string `json:"photo_url"`
 	FollowingCount int    `json:"following_count"`
 	FollowersCount int    `json:"followers_count"`
+	PostsCount     int    `json:"posts_count"`
 }
 
 func (d *BusinessData) MapFromModel(m *models.BusinessProfile) *BusinessData {

@@ -41,6 +41,7 @@ type BusinessProfile struct {
 	Bio            string `json:"bio"`
 	DayOffs        string `json:"day_offs"`
 	FollowersCount int    `json:"followers_count"`
+	PostsCount     int    `json:"posts_count"`
 }
 
 type Booking struct {
