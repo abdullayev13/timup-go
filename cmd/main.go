@@ -149,6 +149,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 }
 
 func init() {
+	godotenv.Load(".env")
 	godotenv.Load("default.env")
 	config.LoadVarsFromEnv()
 }
