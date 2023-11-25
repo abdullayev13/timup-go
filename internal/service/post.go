@@ -115,9 +115,17 @@ func (s *Post) Update(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 	if data.MediaType == "" {
 		if data.Video == nil && model.VideoPath == "" {
 			data.MediaType = models.Photo
+			model.MediaType = string(models.Photo)
 		} else {
 			data.MediaType = models.Video
+			model.MediaType = string(models.Video)
 		}
+	}
+	if data.Title != "" {
+		model.Title = data.Title
+	}
+	if data.Description != "" {
+		model.Description = data.Description
 	}
 
 	switch data.MediaType {
