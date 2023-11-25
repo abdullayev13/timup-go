@@ -133,7 +133,7 @@ func (s *Post) Update(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 		model.VideoPath = ""
 		model.MediaType = string(models.Photo)
 	case models.Video:
-		if data.Video == nil || model.VideoPath == "" {
+		if data.Video == nil && model.VideoPath == "" {
 			return nil, errors.New("video not found")
 		}
 		model.MediaType = string(models.Video)
