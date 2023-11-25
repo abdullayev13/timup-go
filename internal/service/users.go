@@ -1,7 +1,6 @@
 package service
 
 import (
-	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/repo"
@@ -30,7 +29,7 @@ func (s *Users) Register(data *dtos.RegisterReq) (*dtos.RegisterRes, error) {
 
 	var photoUrl string
 	if data.ProfilePhoto != nil {
-		photoUrl, err = utill.Upload(data.ProfilePhoto, config.ProfilePhotoDir)
+		photoUrl, err = utill.TranscodeAndUploadS3Img(data.ProfilePhoto)
 		if err != nil {
 			return nil, err
 		}
@@ -173,7 +172,7 @@ func (s *Users) EditPhoto(data *dtos.PhotoReq) (*dtos.PhotoRes, error) {
 
 	var photoUrl = data.PhotoUrl
 	if data.ProfilePhoto != nil {
-		photoUrl, err = utill.Upload(data.ProfilePhoto, "profilephoto")
+		photoUrl, err = utill.TranscodeAndUploadS3Img(data.ProfilePhoto)
 		if err != nil {
 			return nil, err
 		}

@@ -19,6 +19,7 @@ var (
 	EskizToken          = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDE2MDA4NTIsImlhdCI6MTY5OTAwODg1Miwicm9sZSI6InVzZXIiLCJzdWIiOiI0MTk3In0.bacrSAeF7eOGaXAa59oypdSMvLUnI3I_uTGmA6INpcw"
 	ProfilePhotoDir     = "profilephoto"
 	PostDir             = "post"
+	S3BucketName        = "public-timeup-s3-media"
 )
 
 const (

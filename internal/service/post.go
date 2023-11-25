@@ -1,7 +1,6 @@
 package service
 
 import (
-	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/repo"
@@ -20,19 +19,17 @@ func (s *Post) Create(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 		return nil, errors.New("permission denied: you are not owner of this business profile")
 	}
 
-	if data.Photo == nil {
-		return nil, errors.New("photo not found")
-	}
-
 	var err error
-	data.PhotoPath, err = utill.Upload(data.Photo, config.PostDir)
-	if err != nil {
-		return nil, fmt.Errorf("error uploading photo: %s", err.Error())
+	if data.Photo != nil {
+		data.PhotoPath, err = utill.TranscodeAndUploadS3Img(data.Photo)
+		if err != nil {
+			return nil, fmt.Errorf("error uploading photo: %s", err.Error())
+		}
 	}
 
 	data.MediaType = models.Photo
 	if data.Video != nil {
-		data.VideoPath, err = utill.Upload(data.Video, config.PostDir)
+		data.VideoPath, err = utill.TranscodeAndUploadS3Video(data.Video)
 		if err != nil {
 			return nil, fmt.Errorf("error uploading video: %s", err.Error())
 		}
@@ -142,14 +139,14 @@ func (s *Post) Update(data *dtos.PostFile, userId int) (*dtos.Post, error) {
 	}
 
 	if data.Photo != nil {
-		model.PhotoPath, err = utill.Upload(data.Photo, config.PostDir)
+		model.PhotoPath, err = utill.TranscodeAndUploadS3Img(data.Photo)
 		if err != nil {
 			return nil, fmt.Errorf("error uploading photo: %s", err.Error())
 		}
 	}
 
 	if data.Video != nil {
-		data.VideoPath, err = utill.Upload(data.Video, config.PostDir)
+		data.VideoPath, err = utill.TranscodeAndUploadS3Video(data.Video)
 		if err != nil {
 			return nil, fmt.Errorf("error uploading video: %s", err.Error())
 		}

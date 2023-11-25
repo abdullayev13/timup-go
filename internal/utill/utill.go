@@ -2,6 +2,7 @@ package utill
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"math/rand"
 	"mime/multipart"
@@ -69,4 +70,11 @@ func Upload(file *multipart.FileHeader, folder string) (string, error) {
 	}
 
 	return "/media/" + folder + "/" + filename, nil
+}
+
+func RemoveFile(filePath string) {
+	err := os.Remove(filePath)
+	if err != nil {
+		fmt.Printf("unable to delete file: %v", err)
+	}
 }
