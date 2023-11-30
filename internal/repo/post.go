@@ -94,7 +94,8 @@ func (r *Post) GetMiniList(data *dtos.PostFilter) ([]*models.Post, error) {
            WHEN LENGTH(description) < 64 THEN description
            ELSE SUBSTRING(description, 1, 61) || '...'
            END AS description,
-       business_id
+       business_id,
+       created_at
 FROM posts p WHERE TRUE`}
 	args := []any{}
 
@@ -106,7 +107,7 @@ FROM posts p WHERE TRUE`}
 		query = append(query, "AND media_type > ?")
 		args = append(args, data.MediaType)
 	}
-	query = append(query, "ORDER BY created_at LIMIT ? OFFSET ?")
+	query = append(query, "ORDER BY created_at DESC LIMIT ? OFFSET ?")
 	args = append(args, data.Limit, data.Offset)
 
 	res := make([]*models.Post, 0, data.Limit)
