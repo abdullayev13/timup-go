@@ -20,6 +20,7 @@ var (
 	ProfilePhotoDir     = "profilephoto"
 	PostDir             = "post"
 	S3BucketName        = "public-timeup-s3-media"
+	FfmpegRunLimit      = 30
 )
 
 const (

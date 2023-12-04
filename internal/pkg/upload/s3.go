@@ -1,4 +1,4 @@
-package utill
+package upload
 
 import (
 	"abdullayev13/timeup/internal/config"

@@ -3,10 +3,13 @@ package service
 import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
+	"abdullayev13/timeup/internal/pkg/transcode_upload"
 	"abdullayev13/timeup/internal/repo"
 	"abdullayev13/timeup/internal/utill"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -14,44 +17,109 @@ type Post struct {
 	Repo *repo.Repo
 }
 
-func (s *Post) Create(data *dtos.PostFile, userId int) (*dtos.Post, error) {
+func (s *Post) Create(data *dtos.PostFile, userId int) (map[string]any, error) {
 	if !s.Repo.Business.ExistsByIdAndUserId(data.BusinessId, userId) {
 		return nil, errors.New("permission denied: you are not owner of this business profile")
 	}
 
-	var err error
+	var (
+		videoErr, imgErr error
+		spendingMinutes  int64
+	)
+	var wg sync.WaitGroup
 	if data.Photo != nil {
-		data.PhotoPath, err = utill.TranscodeAndUploadS3Img(data.Photo)
-		if err != nil {
-			return nil, fmt.Errorf("error uploading photo: %s", err.Error())
-		}
+		spendingMinutes += (data.Photo.Size >> 20) / 5
+
+		wg.Add(1)
+		go transcode_upload.TranscodeAndUploadS3Img(data.Photo, func(url string, err error) {
+			defer wg.Done()
+			if err != nil {
+				imgErr = err
+				return
+			}
+			data.PhotoPath = url
+		})
 	}
 
 	data.MediaType = models.Photo
 	if data.Video != nil {
-		data.VideoPath, err = utill.TranscodeAndUploadS3Video(data.Video)
-		if err != nil {
-			return nil, fmt.Errorf("error uploading video: %s", err.Error())
-		}
+		spendingMinutes += (data.Video.Size >> 20) / 7
+
+		wg.Add(1)
+		go transcode_upload.TranscodeAndUploadS3Video(data.Video, func(url string, err error) {
+			defer wg.Done()
+			if err != nil {
+				videoErr = err
+				return
+			}
+			data.VideoPath = url
+		})
+
 		data.MediaType = models.Video
 	}
 
 	data.Id = 0
 	data.CreatedAt = time.Now()
 
-	model := data.MapToModel()
+	go func() {
+		wg.Wait()
 
-	model, err = s.Repo.Post.Create(model)
-	if err != nil {
-		return nil, err
-	}
+		if imgErr != nil {
+			fmt.Printf("error uploading img[user_id=%d]:%s", userId, imgErr.Error())
+			return
+		}
+		if videoErr != nil {
+			fmt.Printf("error uploading video[user_id=%d]:%s", userId, videoErr.Error())
+			return
+		}
 
-	res := new(dtos.Post)
-	res.MapFromModel(model)
-	res.Photo = utill.PutMediaPostDomain(res.Photo)
-	res.Video = utill.PutMediaPostDomain(res.Video)
+		model := data.MapToModel()
 
-	return res, nil
+		model, err := s.Repo.Post.Create(model)
+		if err != nil {
+			jsonData, _ := json.Marshal(model)
+			fmt.Printf("error creating post[user_id=%d]:%s; %x", userId, err.Error(), jsonData)
+			return
+		}
+	}()
+
+	return map[string]any{
+		"spending_minute": spendingMinutes,
+	}, nil
+
+	//var err error
+	//if data.Photo != nil {
+	//	data.PhotoPath, err = utill.TranscodeAndUploadS3Img(data.Photo)
+	//	if err != nil {
+	//		return nil, fmt.Errorf("error uploading photo: %s", err.Error())
+	//	}
+	//}
+	//
+	//data.MediaType = models.Photo
+	//if data.Video != nil {
+	//	data.VideoPath, err = utill.TranscodeAndUploadS3Video(data.Video)
+	//	if err != nil {
+	//		return nil, fmt.Errorf("error uploading video: %s", err.Error())
+	//	}
+	//	data.MediaType = models.Video
+	//}
+	//
+	//data.Id = 0
+	//data.CreatedAt = time.Now()
+	//
+	//model := data.MapToModel()
+	//
+	//model, err = s.Repo.Post.Create(model)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//res := new(dtos.Post)
+	//res.MapFromModel(model)
+	//res.Photo = utill.PutMediaPostDomain(res.Photo)
+	//res.Video = utill.PutMediaPostDomain(res.Video)
+	//
+	//return res, nil
 }
 
 func (s *Post) GetList(data *dtos.PostFilter) ([]*dtos.Post, error) {

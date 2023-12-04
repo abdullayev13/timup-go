@@ -1,6 +1,7 @@
 package utill
 
 import (
+	"abdullayev13/timeup/internal/pkg/upload"
 	"github.com/google/uuid"
 	"mime/multipart"
 )
@@ -27,7 +28,7 @@ func TranscodeAndUploadS3Video(file *multipart.FileHeader) (string, error) {
 	}
 	defer RemoveFile(outputFilePath)
 
-	fileUrl, err := UploadToS3(outputFilePath)
+	fileUrl, err := upload.UploadToS3(outputFilePath)
 	if err != nil {
 		return "", err
 	}
@@ -52,7 +53,7 @@ func TranscodeAndUploadS3Img(file *multipart.FileHeader) (string, error) {
 	}
 	defer RemoveFile(outputFilePath)
 
-	fileUrl, err := UploadToS3(outputFilePath)
+	fileUrl, err := upload.UploadToS3(outputFilePath)
 	if err != nil {
 		return "", err
 	}
