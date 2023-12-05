@@ -115,10 +115,15 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		booking.POST("/client/create", mw.UserIDFromToken, h.Create)
 
 		booking.GET("/client/get-list", mw.UserIDFromToken, h.GetListByClient)
+		booking.GET("/my-bookings-with-business-profiles", mw.UserIDFromToken, h.GetListByClient)
 		booking.GET("/business/get-list/:business_id", h.GetListByBusinessId)
+		booking.GET("/get-clients-of-business-profile/:business_id", h.GetListByBusinessId)
+
+		booking.PUT("/update/:id", mw.UserIDFromToken, h.Update)
 
 		booking.DELETE("/client/delete/:id", mw.UserIDFromToken, h.DeleteByClient)
 		booking.DELETE("/business/delete/:id", mw.UserIDFromToken, h.DeleteByBusiness)
+		booking.DELETE("/delete/:id", mw.UserIDFromToken, h.DeleteById)
 	}
 
 	post := v1.Group("/post")
@@ -144,7 +149,6 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 			config.Domain = c.Query("domain")
 		})
 		dev.GET("/booking/get-list", handlers.Booking.GetList)
-		booking.GET("/dev/delete/:id", handlers.Booking.DeleteById)
 	}
 }
 

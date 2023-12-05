@@ -91,6 +91,31 @@ func (h *Booking) GetListByBusinessId(c *gin.Context) {
 	response.Success(c, res)
 }
 
+func (h *Booking) Update(c *gin.Context) {
+	data := new(dtos.Booking)
+	err := c.Bind(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	data.ID, err = strconv.Atoi(c.Param("id"))
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+
+	res, err := h.Service.Booking.Update(data, userId)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, res)
+}
+
 func (h *Booking) DeleteByClient(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -128,13 +153,15 @@ func (h *Booking) DeleteByBusiness(c *gin.Context) {
 }
 
 func (h *Booking) DeleteById(c *gin.Context) {
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		response.FailErr(c, err)
 		return
 	}
 
-	err = h.Service.Booking.DeleteById(id)
+	err = h.Service.Booking.DeleteById(id, userId)
 	if err != nil {
 		response.FailErr(c, err)
 		return

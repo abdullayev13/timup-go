@@ -109,7 +109,36 @@ func (s *Booking) GetListByBusiness(data *dtos.BookingFilter, businessId int) ([
 	return list, nil
 }
 
-func (s *Booking) DeleteById(id int) error {
+func (s *Booking) Update(data *dtos.Booking, userId int) (*dtos.Booking, error) {
+	ok, err := s.Repo.Booking.ExistsByIdAndPartyId(data.ID, userId)
+	if err != nil || !ok {
+		return nil, errors.New("access denied")
+	}
+
+	dataModel := data.MapToModel()
+	if dataModel.Date.Before(time.Now()) {
+		return nil, errors.New("booking time is past or not given")
+	}
+
+	model, err := s.Repo.Booking.GetById(data.ID)
+
+	model.Date = dataModel.Date
+
+	model, err = s.Repo.Booking.Update(model)
+	if err != nil {
+		return nil, err
+	}
+
+	data.MapFromModel(model)
+	return data, nil
+}
+
+func (s *Booking) DeleteById(id int, userId int) error {
+	ok, err := s.Repo.Booking.ExistsByIdAndPartyId(id, userId)
+	if err != nil || !ok {
+		return errors.New("access denied")
+	}
+
 	return s.Repo.Booking.DeleteById(id)
 }
 

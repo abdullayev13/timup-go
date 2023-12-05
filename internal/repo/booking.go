@@ -138,3 +138,14 @@ WHERE b.business_id = ?`}
 
 	return res, err
 }
+
+func (r *Booking) ExistsByIdAndPartyId(id, userId int) (bool, error) {
+	exists := false
+	err := r.DB.Raw(`SELECT (b.client_id = ? OR u.id = ?) AS exists
+FROM bookings b
+         JOIN business_profiles bp ON bp.id = b.business_id
+         JOIN users u ON u.id = bp.user_id
+WHERE b.id = ?`, userId, userId, id).Find(&exists).Error
+
+	return exists, err
+}
