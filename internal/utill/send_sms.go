@@ -2,11 +2,8 @@ package utill
 
 import (
 	"abdullayev13/timeup/internal/config"
-	"bytes"
 	"fmt"
-	"io/ioutil"
-	"mime/multipart"
-	"net/http"
+	"github.com/realtemirov/eskizuz"
 )
 
 func SendSmsCode(phoneNumber string, code int) {
@@ -15,42 +12,18 @@ func SendSmsCode(phoneNumber string, code int) {
 }
 
 func SendSms(phoneNumber, smsMsg string) {
-
-	url := "notify.eskiz.uz/api/message/sms/send"
-	method := "POST"
-
-	payload := &bytes.Buffer{}
-	writer := multipart.NewWriter(payload)
-	_ = writer.WriteField("mobile_phone", phoneNumber)
-	_ = writer.WriteField("message", smsMsg)
-	_ = writer.WriteField("from", "4546")
-	_ = writer.WriteField("callback_url", "http://0000.uz/test.php")
-	err := writer.Close()
-	if err != nil {
-		fmt.Println(err)
-		return
+	if len(phoneNumber) > 12 {
+		phoneNumber = phoneNumber[1:]
 	}
 
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
-	req.Header.Add("Authorization", "Bearer "+config.EskizToken)
+	sms := &eskizuz.SMS{
+		MobilePhone: phoneNumber,
+		Message:     smsMsg,
+		From:        "4546",
+		CallbackURL: "https://eskiz.uz",
+	}
 
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	res, err := client.Do(req)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer res.Body.Close()
-
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(string(body))
+	// Sending message
+	result, err := config.Eskiz.Send(sms)
+	_, _ = result, err
 }

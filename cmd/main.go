@@ -149,6 +149,9 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 			config.Domain = c.Query("domain")
 		})
 		dev.GET("/booking/get-list", handlers.Booking.GetList)
+		dev.GET("/eskiz/set-data", handlers.Dev.EskizSetData)
+		dev.POST("/eskiz/set-data", handlers.Dev.EskizSetData)
+		dev.GET("/eskiz/refresh-token", handlers.Dev.EskizRefreshToken)
 	}
 }
 
