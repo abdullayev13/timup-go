@@ -46,6 +46,29 @@ func (h *Category) Get(c *gin.Context) {
 	response.Success(c, res)
 }
 
+func (h *Category) Update(c *gin.Context) {
+	data := new(dtos.WorkCategory)
+	err := c.Bind(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	data.ID, err = strconv.Atoi(c.Param("id"))
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	res, err := h.Service.Category.Update(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, res)
+}
+
 func (h *Category) Delete(c *gin.Context) {
 	//	userId := c.GetInt(config.UserIdKeyFromAuthMw)
 	id, err := strconv.Atoi(c.Param("id"))

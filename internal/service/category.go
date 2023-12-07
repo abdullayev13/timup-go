@@ -3,6 +3,7 @@ package service
 import (
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/repo"
+	"errors"
 )
 
 type Category struct {
@@ -41,8 +42,29 @@ func (s *Category) GetByParentId(userId int) ([]*dtos.WorkCategory, error) {
 	return dtoSlc, nil
 }
 
-func (s *Category) Update(dto *dtos.WorkCategory) (*dtos.WorkCategory, error) {
-	return nil, nil
+func (s *Category) Update(data *dtos.WorkCategory) (*dtos.WorkCategory, error) {
+	model, err := s.Repo.Category.GetById(data.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	model.Name = data.Name
+	if data.ParentId != 0 && model.ParentId != data.ParentId {
+		_, err = s.Repo.Category.GetById(data.ParentId)
+		if err != nil {
+			return nil, errors.New("error with parent category: " + err.Error())
+		}
+
+		model.ParentId = data.ParentId
+	}
+
+	model, err = s.Repo.Category.Update(model)
+	if err != nil {
+		return nil, err
+	}
+
+	data.MapFromModel(model)
+	return data, nil
 }
 
 func (s *Category) DeleteById(id int) error {

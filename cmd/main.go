@@ -106,6 +106,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		h := handlers.Category
 		category.POST("/create", mw.UserIDFromToken, h.Create)
 		category.GET("/get", h.Get)
+		category.PUT("/update/:id", h.Update)
 		category.DELETE("/delete/:id", mw.UserIDFromToken, h.Delete)
 	}
 
