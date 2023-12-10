@@ -7,19 +7,20 @@ import (
 )
 
 var (
-	Domain              = ""
-	Port                = ""
-	JwtSignKey          = "secret"
-	JwtExpiringDuration = time.Hour * 24 * 100_000
-	DbHost              = "localhost"
-	DbUsername          = "postgres"
-	DbName              = "postgres"
-	DbPassword          = "password"
-	DbPort              = 5432
-	ProfilePhotoDir     = "profilephoto"
-	PostDir             = "post"
-	S3BucketName        = "public-timeup-s3-media"
-	FfmpegRunLimit      = 30
+	Domain                 = ""
+	Port                   = ""
+	JwtSignKey             = "secret"
+	JwtExpiringDuration    = time.Hour * 24 * 100_000
+	DbHost                 = "localhost"
+	DbUsername             = "postgres"
+	DbName                 = "postgres"
+	DbPassword             = "password"
+	DbPort                 = 5432
+	ProfilePhotoDir        = "profilephoto"
+	PostDir                = "post"
+	S3BucketName           = "public-timeup-s3-media"
+	FfmpegRunLimit         = 30
+	DefaultBookingDuration = 30 * time.Minute
 )
 
 const (

@@ -5,6 +5,7 @@ import (
 	"abdullayev13/timeup/internal/models"
 	"gorm.io/gorm"
 	"strings"
+	"time"
 )
 
 type Booking struct {
@@ -148,4 +149,19 @@ FROM bookings b
 WHERE b.id = ?`, userId, userId, id).Find(&exists).Error
 
 	return exists, err
+}
+
+func (r *Booking) GetBetweenByBusiness(businessId int, start, end time.Time) []*models.Booking {
+	res := make([]*models.Booking, 0)
+
+	r.DB.Raw(`SELECT *
+FROM bookings b
+WHERE business_id = ? AND
+((? <= b.date AND b.date < ?)
+    OR
+(? < b.end_time AND b.end_time <= ?))`,
+		businessId, start, end, start, end).
+		Find(&res)
+
+	return res
 }

@@ -169,3 +169,40 @@ func (h *Booking) DeleteById(c *gin.Context) {
 
 	response.Success(c, "ok")
 }
+
+// other
+
+func (h *Booking) GetListWithBookingCategory(c *gin.Context) {
+	businessId, err := strconv.Atoi(c.Param("business_id"))
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	data := new(dtos.BookingFilter)
+	err = c.BindQuery(data)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	userId := c.GetInt(config.UserIdKeyFromAuthMw)
+	data.BusinessId = businessId
+
+	bookings, err := h.Service.Booking.GetListByClient(data, userId)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	bcs, err := h.Service.BookingCategory.GetByBusinessId(data.BusinessId)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, map[string]any{
+		"bookings":           bookings,
+		"booking_categories": bcs,
+	})
+}

@@ -120,6 +120,8 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		booking.GET("/business/get-list/:business_id", h.GetListByBusinessId)
 		booking.GET("/get-clients-of-business-profile/:business_id", h.GetListByBusinessId)
 
+		booking.GET("/list-booking-and-booking-category/:business_id", mw.UserIDFromToken, h.GetListWithBookingCategory)
+
 		booking.PUT("/update/:id", mw.UserIDFromToken, h.Update)
 
 		booking.DELETE("/client/delete/:id", mw.UserIDFromToken, h.DeleteByClient)
@@ -161,6 +163,7 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		dev.GET("/eskiz/set-data", handlers.Dev.EskizSetData)
 		dev.POST("/eskiz/set-data", handlers.Dev.EskizSetData)
 		dev.GET("/eskiz/refresh-token", handlers.Dev.EskizRefreshToken)
+		dev.POST("/db/query", handlers.Dev.DbQuery)
 	}
 }
 

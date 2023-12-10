@@ -15,3 +15,7 @@ func Format(tm time.Time) (dmy, hm string) {
 	hm = tm.Format("15:04")
 	return dmy, hm
 }
+
+func FormatHHmmTZ0(tm time.Time) string {
+	return tm.In(time.UTC).Format("15:04")
+}

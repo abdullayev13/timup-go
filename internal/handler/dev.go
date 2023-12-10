@@ -51,3 +51,23 @@ func (h *Dev) EskizRefreshToken(c *gin.Context) {
 
 	response.Success(c, "done")
 }
+
+func (h *Dev) DbQuery(c *gin.Context) {
+	var query string
+	err := c.Bind(query)
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	res := make([]map[string]any, 0, 13)
+	err = h.Service.Users.Repo.Users.DB.
+		Raw(query).
+		Find(&res).Error
+	if err != nil {
+		response.FailErr(c, err)
+		return
+	}
+
+	response.Success(c, res)
+}

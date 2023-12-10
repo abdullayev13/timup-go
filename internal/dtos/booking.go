@@ -23,6 +23,10 @@ type BookingMini struct {
 	DateJson   string    `json:"date"`
 	Time       string    `json:"time"`
 
+	End     time.Time `json:"-"`
+	EndDate string    `json:"end_date"`
+	EndTime string    `json:"end_time"`
+
 	FistName    string `json:"fist_name"`
 	LastName    string `json:"last_name"`
 	UserName    string `json:"user_name"`
@@ -35,6 +39,7 @@ func (d *BookingMini) MapFromModel(m *models.Booking) *BookingMini {
 	d.BusinessId = m.BusinessId
 	d.ClientId = m.ClientId
 	d.DateJson, d.Time = utill.Format(m.Date)
+	d.EndDate, d.EndTime = utill.Format(m.EndTime)
 
 	return d
 }

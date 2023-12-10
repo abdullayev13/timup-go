@@ -42,10 +42,12 @@ type BusinessProfile struct {
 }
 
 type Booking struct {
-	ID         int
-	BusinessId int
-	ClientId   int
-	Date       time.Time
+	ID                int
+	BusinessId        int
+	ClientId          int
+	BookingCategoryId *int
+	Date              time.Time `gorm:"index:idx_booking__date;not null"`
+	EndTime           time.Time `gorm:"index:idx_booking__end_time;"`
 }
 
 type Following struct {

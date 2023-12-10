@@ -45,11 +45,14 @@ type BusinessProfile struct {
 }
 
 type Booking struct {
-	ID         int    `json:"id"`
-	BusinessId int    `json:"business_id"`
-	ClientId   int    `json:"client_id"`
-	Date       string `json:"date"`
-	Time       string `json:"time"`
+	ID                int    `json:"id"`
+	BusinessId        int    `json:"business_id"`
+	ClientId          int    `json:"client_id"`
+	BookingCategoryId *int   `json:"booking_category_id"`
+	Date              string `json:"date"`
+	Time              string `json:"time"`
+	EndDate           string `json:"end_date"`
+	EndTime           string `json:"end_time"`
 }
 
 type Following struct {
@@ -148,7 +151,9 @@ func (d *Booking) MapFromModel(m *models.Booking) *Booking {
 	d.ID = m.ID
 	d.BusinessId = m.BusinessId
 	d.ClientId = m.ClientId
+	d.BookingCategoryId = m.BookingCategoryId
 	d.Date, d.Time = utill.Format(m.Date)
+	d.EndDate, d.EndTime = utill.Format(m.EndTime)
 
 	return d
 }
@@ -159,7 +164,9 @@ func (d *Booking) MapToModel() *models.Booking {
 	m.ID = d.ID
 	m.BusinessId = d.BusinessId
 	m.ClientId = d.ClientId
+	m.BookingCategoryId = d.BookingCategoryId
 	m.Date, _ = utill.Parse(d.Date, d.Time)
+	m.EndTime, _ = utill.Parse(d.EndDate, d.EndTime)
 
 	return m
 }

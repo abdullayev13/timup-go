@@ -1,11 +1,13 @@
 package service
 
 import (
+	"abdullayev13/timeup/internal/config"
 	"abdullayev13/timeup/internal/dtos"
 	"abdullayev13/timeup/internal/models"
 	"abdullayev13/timeup/internal/repo"
 	"abdullayev13/timeup/internal/utill"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -15,17 +17,35 @@ type Booking struct {
 
 func (s *Booking) Create(data *dtos.Booking) (*dtos.Booking, error) {
 	data.ID = 0
-
-	exists := s.Repo.Business.ExistsById(data.BusinessId)
-	if !exists {
-		return nil, errors.New("business not found")
-	}
 	var err error
 
 	model := data.MapToModel()
 
+	if model.BookingCategoryId == nil {
+		exists := s.Repo.Business.ExistsById(model.BusinessId)
+		if !exists {
+			return nil, errors.New("business not found")
+		}
+		model.EndTime = model.Date.Add(config.DefaultBookingDuration)
+	} else {
+		bc, err := s.Repo.BookingCategory.GetById(*model.BookingCategoryId)
+		if err != nil {
+			return nil, errors.New("booking_category: " + err.Error())
+		}
+
+		model.BusinessId = bc.BusinessId
+		model.EndTime = model.Date.Add(bc.Duration)
+	}
+
 	if model.Date.Before(time.Now()) {
 		return nil, errors.New("booking time is past or not given")
+	}
+
+	bookings := s.Repo.Booking.GetBetweenByBusiness(model.BusinessId, model.Date, model.EndTime)
+	if len(bookings) > 0 {
+		return nil, fmt.Errorf("can not create: exists booking from '%s' to '%s'",
+			utill.FormatHHmmTZ0(bookings[0].Date),
+			utill.FormatHHmmTZ0(bookings[0].EndTime))
 	}
 
 	model, err = s.Repo.Booking.Create(model)
