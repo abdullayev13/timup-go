@@ -67,6 +67,12 @@ func TranscodeImg(inputPath, outputPath string) error {
 	return nil
 }
 
+func GenerateThumbnail(inputFile, thumbnailFile string) error {
+	timeOffset := "00:00:03"
+
+	return generateThumbnail(inputFile, thumbnailFile, timeOffset)
+}
+
 func saveAsJPEG(img image.Image, outputPath string, quality int) error {
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
@@ -78,6 +84,27 @@ func saveAsJPEG(img image.Image, outputPath string, quality int) error {
 	err = jpeg.Encode(outputFile, img, &jpeg.Options{Quality: quality})
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func generateThumbnail(inputFile string, thumbnailFile string, timeOffset string) error {
+	// FFmpeg command to generate thumbnail
+	cmd := exec.Command(
+		"ffmpeg",
+		"-i", inputFile,
+		"-ss", timeOffset,
+		"-vframes", "1",
+		"-q:v", "2",
+		"-y",
+		thumbnailFile,
+	)
+
+	// Execute the FFmpeg command
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to generate thumbnail: %v\n%s", err, output)
 	}
 
 	return nil

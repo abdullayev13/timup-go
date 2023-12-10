@@ -22,6 +22,13 @@ func TranscodeImg(inputPath, outputPath string, callback func(error)) {
 	})
 }
 
+func GenerateThumbnail(inputPath, outputPath string, callback func(error)) {
+	Do(func() {
+		err := generateThumbnail(inputPath, outputPath, "00:00:00")
+		callback(err)
+	})
+}
+
 func Do(fun func()) {
 	funcs <- fun
 }

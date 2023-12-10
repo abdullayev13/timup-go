@@ -83,3 +83,44 @@ func TranscodeAndUploadS3Img(file *multipart.FileHeader, callback func(string, e
 
 	callback(fileUrl, nil)
 }
+
+func ThumbnailAndUploadS3(videoFile *multipart.FileHeader, callback func(string, error)) {
+	{
+		cloneFile := *videoFile
+		cloneFile.Filename = "thumbnail_" + cloneFile.Filename
+		videoFile = &cloneFile
+	}
+
+	filePath, err := utill.Upload(videoFile, tempFileName)
+	if err != nil {
+		callback("", err)
+		return
+	}
+	filePath = "." + filePath
+	defer utill.RemoveFile(filePath)
+
+	uuidName := uuid.New().String()
+	outputFilePath := mediaTempFileName + "/" + uuidName + ".jpg"
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	ffmpeg.GenerateThumbnail(filePath, outputFilePath, func(callbackErr error) {
+		err = callbackErr
+		wg.Done()
+	})
+
+	wg.Wait()
+	if err != nil {
+		callback("", err)
+		return
+	}
+	defer utill.RemoveFile(outputFilePath)
+
+	fileUrl, err := upload.UploadToS3(outputFilePath)
+	if err != nil {
+		callback("", err)
+		return
+	}
+
+	callback(fileUrl, nil)
+}

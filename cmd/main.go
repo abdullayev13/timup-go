@@ -138,6 +138,14 @@ func initApi(r *gin.Engine, handlers *handler.Handlers, mw *middleware.MW) {
 		post.DELETE("/delete/:id", mw.UserIDFromToken, h.DeleteById)
 	}
 
+	bookingCategory := v1.Group("/booking-category")
+	{
+		h := handlers.BookingCategory
+		bookingCategory.POST("/create", mw.UserIDFromToken, h.Create)
+		bookingCategory.GET("/list/:business_id", h.GetList)
+		bookingCategory.DELETE("/delete/:id", mw.UserIDFromToken, h.Delete)
+	}
+
 	region := v1.Group("/region")
 	{
 		h := handlers.Region

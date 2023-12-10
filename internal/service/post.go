@@ -56,6 +56,21 @@ func (s *Post) Create(data *dtos.PostFile, userId int) (map[string]any, error) {
 		})
 
 		data.MediaType = models.Video
+
+		if data.Photo == nil {
+			spendingMinutes += 1
+
+			wg.Add(1)
+			go transcode_upload.ThumbnailAndUploadS3(data.Video, func(url string, err error) {
+				defer wg.Done()
+				if err != nil {
+					imgErr = err
+					return
+				}
+				data.PhotoPath = url
+			})
+		}
+
 	}
 
 	data.Id = 0

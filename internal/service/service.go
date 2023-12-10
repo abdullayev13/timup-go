@@ -6,13 +6,14 @@ import (
 )
 
 type Service struct {
-	Users     *Users
-	SmsCode   *SmsCode
-	Business  *Business
-	Category  *Category
-	Booking   *Booking
-	Following *Following
-	Post      *Post
+	Users           *Users
+	SmsCode         *SmsCode
+	Business        *Business
+	Category        *Category
+	Booking         *Booking
+	Following       *Following
+	Post            *Post
+	BookingCategory *BookingCategory
 }
 
 func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
@@ -25,5 +26,6 @@ func New(repository *repo.Repo, jwtToken *utill.TokenJWT) *Service {
 		&Booking{repository},
 		&Following{repository},
 		&Post{repository},
+		&BookingCategory{repository},
 	}
 }

@@ -66,6 +66,15 @@ type Post struct {
 	CreatedAt   time.Time
 }
 
+type BookingCategory struct {
+	Id          int
+	BusinessId  int `gorm:"index:idx_booking_category_business;not null"`
+	Name        string
+	Description string
+	Duration    time.Duration
+	Price       int
+}
+
 type PostViewed struct {
 	Id           int
 	PostId       int `gorm:"index:idx_post_viewer,unique;not null"`

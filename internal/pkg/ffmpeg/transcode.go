@@ -82,3 +82,24 @@ func saveAsJPEG(img image.Image, outputPath string, quality int) error {
 
 	return nil
 }
+
+func generateThumbnail(inputFile string, thumbnailFile string, timeOffset string) error {
+	// FFmpeg command to generate thumbnail
+	cmd := exec.Command(
+		"ffmpeg",
+		"-i", inputFile,
+		"-ss", timeOffset,
+		"-vframes", "1",
+		"-q:v", "2",
+		"-y",
+		thumbnailFile,
+	)
+
+	// Execute the FFmpeg command
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to generate thumbnail: %v\n%s", err, output)
+	}
+
+	return nil
+}

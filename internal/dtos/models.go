@@ -59,6 +59,15 @@ type Following struct {
 	CreatedAt  time.Time `json:"created_at"`
 }
 
+type BookingCategory struct {
+	Id          int    `json:"id" form:"id"`
+	BusinessId  int    `json:"business_id" form:"business_id"`
+	Name        string `json:"name" form:"name"`
+	Description string `json:"description" form:"description"`
+	Duration    int    `json:"duration" form:"duration"`
+	Price       int    `json:"price" form:"price"`
+}
+
 func (d *User) MapFromUser(m *models.User) *User {
 	d.ID = m.ID
 	d.FistName = m.FistName
@@ -173,4 +182,28 @@ func (d *Following) MapToModel() *models.Following {
 	m.CreatedAt = d.CreatedAt
 
 	return m
+}
+
+func (d *BookingCategory) MapToModel() *models.BookingCategory {
+	m := new(models.BookingCategory)
+
+	m.Id = d.Id
+	m.BusinessId = d.BusinessId
+	m.Name = d.Name
+	m.Description = d.Description
+	m.Duration = time.Duration(d.Duration) * time.Minute
+	m.Price = d.Price
+
+	return m
+}
+
+func (d *BookingCategory) MapFromModel(m *models.BookingCategory) *BookingCategory {
+	d.Id = m.Id
+	d.BusinessId = m.BusinessId
+	d.Name = m.Name
+	d.Description = m.Description
+	d.Duration = int(m.Duration / time.Minute)
+	d.Price = m.Price
+
+	return d
 }

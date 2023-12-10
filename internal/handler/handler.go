@@ -6,16 +6,17 @@ import (
 )
 
 type Handlers struct {
-	SmsCode   *SmsCode
-	Auth      *Auth
-	User      *User
-	Business  *Business
-	Category  *Category
-	Region    *Region
-	Booking   *Booking
-	Following *Following
-	Post      *Post
-	Dev       *Dev
+	SmsCode         *SmsCode
+	Auth            *Auth
+	User            *User
+	Business        *Business
+	Category        *Category
+	Region          *Region
+	Booking         *Booking
+	Following       *Following
+	Post            *Post
+	Dev             *Dev
+	BookingCategory *BookingCategory
 }
 
 func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
@@ -30,5 +31,6 @@ func New(serv *service.Service, jwtToken *utill.TokenJWT) *Handlers {
 		&Following{serv},
 		&Post{serv},
 		&Dev{serv},
+		&BookingCategory{serv},
 	}
 }
