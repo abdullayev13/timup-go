@@ -47,7 +47,7 @@ type Booking struct {
 	ClientId          int
 	BookingCategoryId *int
 	Date              time.Time `gorm:"index:idx_booking__date;not null"`
-	EndTime           time.Time `gorm:"index:idx_booking__end_time;"`
+	EndTime           time.Time `gorm:"index:idx_booking__end_time;not null"`
 }
 
 type Following struct {

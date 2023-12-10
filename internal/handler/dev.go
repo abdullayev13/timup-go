@@ -4,8 +4,10 @@ import (
 	"abdullayev13/timeup/internal/handler/response"
 	"abdullayev13/timeup/internal/service"
 	"abdullayev13/timeup/internal/utill"
+	"database/sql"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"io"
 )
 
 type Dev struct {
@@ -59,15 +61,63 @@ func (h *Dev) DbQuery(c *gin.Context) {
 		response.FailErr(c, err)
 		return
 	}
+	if query == "" {
+		all, _ := io.ReadAll(c.Request.Body)
+		query = string(all)
+	}
 
 	res := make([]map[string]any, 0, 13)
-	err = h.Service.Users.Repo.Users.DB.
-		Raw(query).
-		Find(&res).Error
+	rows, err := h.Service.Users.Repo.Users.DB.
+		Raw(query).Rows()
 	if err != nil {
 		response.FailErr(c, err)
 		return
 	}
 
+	res, _ = rowsToMaps(rows)
+	_ = rows
 	response.Success(c, res)
+}
+
+func rowsToMaps(rows *sql.Rows) ([]map[string]interface{}, error) {
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]map[string]interface{}, 0)
+
+	for rows.Next() {
+		values := make([]interface{}, len(columns))
+		valuePtrs := make([]interface{}, len(columns))
+
+		for i := range columns {
+			valuePtrs[i] = &values[i]
+		}
+
+		err := rows.Scan(valuePtrs...)
+		if err != nil {
+			return nil, err
+		}
+
+		entry := make(map[string]interface{})
+
+		for i, col := range columns {
+			var v interface{}
+			val := values[i]
+
+			// Handle NULL values
+			if val != nil {
+				v = val
+			} else {
+				v = nil
+			}
+
+			entry[col] = v
+		}
+
+		result = append(result, entry)
+	}
+
+	return result, nil
 }
